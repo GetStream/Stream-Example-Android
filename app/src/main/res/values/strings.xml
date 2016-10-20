@@ -1,0 +1,27 @@
+<resources>
+    <string name="pref_whichscreen"></string>
+    <string name="pref_authorid"></string>
+    <string name="pref_authorname"></string>
+    <string name="pref_authoremail"></string>
+
+    <string name="app_name">Stream.io Example</string>
+
+    <string name="placeholder_author_name">\@iandouglas736</string>
+    <string name="placeholder_created_date">2016&#8211;10&#8211;09</string>
+
+    <string name="feed_item_photo_image">FeedItem Photo</string>
+    <string name="feed_item_profile_image">FeedItem Profile Image</string>
+    <string name="feed_item_author_name">FeedItem Author</string>
+    <string name="feed_item_created_date">FeedItem Creation</string>
+
+    <string name="regscreen_intro_text">This example application will demonstrate our desired workflow when building mobile applications using Stream.</string>
+    <string name="regscreen_enter_username">Please enter a desired username.</string>
+    <string name="regscreen_placeholder_username">Desired Username</string>
+    <string name="regscreen_enter_email">Please enter your email address</string>
+    <string name="regscreen_placeholder_email">Email address</string>
+    <string name="regscreen_feedback">Your email address will not be exposed within the app other than to load your Gravatar image (if you have one). Stream may contact you via this Email for feedback.</string>
+
+    <string name="title_activity_feed">FeedActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+</resources>

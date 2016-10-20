@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:text="@string/regscreen_intro_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:padding="8dp"
+        android:id="@+id/text_intro" />
+
+    <TextView
+        android:text="@string/regscreen_enter_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:id="@+id/textview_username" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="@string/regscreen_placeholder_username"
+        android:ems="10"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:id="@+id/editview_username" />
+
+    <TextView
+        android:text="@string/regscreen_enter_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:id="@+id/textview_email" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:hint="@string/regscreen_placeholder_email"
+        android:ems="10"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:id="@+id/editview_email" />
+
+    <Button
+        android:text="Register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/register_button" />
+
+    <TextView
+        android:text="@string/regscreen_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:id="@+id/textview_regscreen_feedback" />
+
+
+</LinearLayout>

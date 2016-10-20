@@ -1,0 +1,26 @@
+$ adb shell am start -n "io.getstream.streamexample/io.getstream.streamexample.MainActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER
+Client not ready yet..Waiting for process to come online
+Connected to process 6470 on device Nexus_6_API_24 [emulator-5554]
+W/System.err: java.net.SocketException: Permission denied
+W/System.err:     at java.net.Socket.createImpl(Socket.java:454)
+W/System.err:     at java.net.Socket.getImpl(Socket.java:517)
+W/System.err:     at java.net.Socket.setSoTimeout(Socket.java:1108)
+W/System.err:     at cz.msebera.android.httpclient.conn.scheme.PlainSocketFactory.connectSocket(PlainSocketFactory.java:116)
+W/System.err:     at cz.msebera.android.httpclient.conn.scheme.PlainSocketFactory.connectSocket(PlainSocketFactory.java:157)
+W/System.err:     at cz.msebera.android.httpclient.conn.scheme.SchemeSocketFactoryAdaptor.connectSocket(SchemeSocketFactoryAdaptor.java:65)
+W/System.err:     at cz.msebera.android.httpclient.impl.conn.DefaultClientConnectionOperator.openConnection(DefaultClientConnectionOperator.java:177)
+W/System.err:     at cz.msebera.android.httpclient.impl.conn.AbstractPoolEntry.open(AbstractPoolEntry.java:145)
+W/System.err:     at cz.msebera.android.httpclient.impl.conn.AbstractPooledConnAdapter.open(AbstractPooledConnAdapter.java:131)
+W/System.err:     at cz.msebera.android.httpclient.impl.client.DefaultRequestDirector.tryConnect(DefaultRequestDirector.java:611)
+W/System.err:     at cz.msebera.android.httpclient.impl.client.DefaultRequestDirector.execute(DefaultRequestDirector.java:446)
+W/System.err:     at cz.msebera.android.httpclient.impl.client.AbstractHttpClient.doExecute(AbstractHttpClient.java:860)
+W/System.err:     at cz.msebera.android.httpclient.impl.client.CloseableHttpClient.execute(CloseableHttpClient.java:82)
+W/System.err:     at com.loopj.android.http.AsyncHttpRequest.makeRequest(AsyncHttpRequest.java:146)
+W/System.err:     at com.loopj.android.http.AsyncHttpRequest.makeRequestWithRetries(AsyncHttpRequest.java:177)
+W/System.err:     at com.loopj.android.http.AsyncHttpRequest.run(AsyncHttpRequest.java:106)
+W/System.err:     at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:428)
+W/System.err:     at java.util.concurrent.FutureTask.run(FutureTask.java:237)
+W/System.err:     at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1133)
+W/System.err:     at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:607)
+W/System.err:     at java.lang.Thread.run(Thread.java:761)
+V/AsyncHttpRH: Request retry no. 1
