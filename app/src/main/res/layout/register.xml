@@ -1,68 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <TextView
-        android:text="@string/regscreen_intro_text"
-        android:layout_width="match_parent"
+    <ProgressBar
+        android:id="@+id/login_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:padding="8dp"
-        android:id="@+id/text_intro" />
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
 
-    <TextView
-        android:text="@string/regscreen_enter_username"
+    <ScrollView
+        android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:id="@+id/textview_username" />
+        android:layout_height="match_parent">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:hint="@string/regscreen_placeholder_username"
-        android:ems="10"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:id="@+id/editview_username" />
+        <LinearLayout
+            android:id="@+id/email_login_form"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <TextView
-        android:text="@string/regscreen_enter_email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:id="@+id/textview_email" />
+            <TextView
+                android:id="@+id/text_intro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="72dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/regscreen_intro_text"
+                android:textAlignment="center"
+                android:textColor="@color/stream_black"
+                android:textSize="24sp" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:hint="@string/regscreen_placeholder_email"
-        android:ems="10"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:id="@+id/editview_email" />
+            <EditText
+                android:id="@+id/editview_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="48dp"
+                android:ems="10"
+                android:hint="@string/regscreen_placeholder_username"
+                android:imeActionId="@+id/login"
+                android:imeActionLabel="@string/action_sign_in_short"
+                android:imeOptions="actionUnspecified"
+                android:inputType="textPersonName"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp" />
 
-    <Button
-        android:text="Register"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/register_button" />
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-    <TextView
-        android:text="@string/regscreen_feedback"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:id="@+id/textview_regscreen_feedback" />
+                <AutoCompleteTextView
+                    android:id="@+id/email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:hint="@string/prompt_email"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:singleLine="true" />
 
+            </android.support.design.widget.TextInputLayout>
 
+            <TextView
+                android:id="@+id/textview_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="48dp"
+                android:layout_marginStart="48dp"
+                android:layout_marginTop="16dp"
+                android:autoLink="web"
+                android:text="@string/regscreen_agree_to_terms"
+                android:textAlignment="center"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/register_button"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="32dp"
+                android:background="@color/stream_button_background"
+                android:paddingEnd="20dp"
+                android:paddingStart="20dp"
+                android:text="@string/regscreen_signup_button_text"
+                android:textColor="@color/stream_button_text_blue"
+                android:textColorLink="?android:attr/colorAccent" />
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

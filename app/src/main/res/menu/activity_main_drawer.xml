@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--<group android:checkableBehavior="single">-->
+        <item
+            android:id="@+id/nav_global_feed"
+            android:title="@string/menu_global_feed" />
+        <item
+            android:id="@+id/nav_my_feed"
+            android:title="@string/menu_my_feed" />
+        <item
+            android:id="@+id/nav_users"
+            android:title="@string/menu_users" />
+        <item
+            android:id="@+id/nav_my_profile"
+            android:title="@string/menu_my_profile" />
+        <item
+            android:id="@+id/nav_register"
+            android:title="@string/menu_register" />
+        <item
+            android:id="@+id/nav_sign_out"
+            android:title="@string/menu_sign_out" />
+    <!--</group>-->
+
+    <!--<item android:title="">-->
+        <!--<menu>-->
+            <!--<item-->
+                <!--android:id="@+id/nav_sign_out"-->
+                <!--android:icon="@drawable/artist_placeholder"-->
+                <!--android:title="@string/menu_sign_out" />-->
+        <!--</menu>-->
+    <!--</item>-->
+
+</menu>

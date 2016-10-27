@@ -4,7 +4,11 @@
     <string name="pref_authorname"></string>
     <string name="pref_authoremail"></string>
 
+
     <string name="app_name">Stream.io Example</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="placeholder_author_name">\@iandouglas736</string>
     <string name="placeholder_created_date">2016&#8211;10&#8211;09</string>
@@ -14,14 +18,38 @@
     <string name="feed_item_author_name">FeedItem Author</string>
     <string name="feed_item_created_date">FeedItem Creation</string>
 
-    <string name="regscreen_intro_text">This example application will demonstrate our desired workflow when building mobile applications using Stream.</string>
-    <string name="regscreen_enter_username">Please enter a desired username.</string>
-    <string name="regscreen_placeholder_username">Desired Username</string>
-    <string name="regscreen_enter_email">Please enter your email address</string>
-    <string name="regscreen_placeholder_email">Email address</string>
-    <string name="regscreen_feedback">Your email address will not be exposed within the app other than to load your Gravatar image (if you have one). Stream may contact you via this Email for feedback.</string>
+    <string name="regscreen_intro_text">Open Your Account</string>
+    <string name="regscreen_placeholder_username">Username</string>
+    <string name="regscreen_placeholder_email">Email Address</string>
+    <string name="regscreen_agree_to_terms">By tapping Sign Up &amp; Accept, you agree to the <a href="http://getstream.io">Terms of Service</a> and <a href="http://getstream.io">Policy</a>.</string>
 
     <string name="title_activity_feed">FeedActivity</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="button_feed_plus">+</string>
+    <string name="contentdesc_profile_image">profile image</string>
+    <string name="placeholder_feeditem_likes">13 likes</string>
+    <string name="regscreen_signup_button_text"><![CDATA[Sign Up & Accept]]></string>
+
+    <string name="example_preferences_item">Example Preferences Item</string>
+    <string name="example_menu_item">Example Menu Item</string>
+
+    <string name="menu_global_feed">Global Feed</string>
+    <string name="menu_my_feed">My Feed</string>
+    <string name="menu_users">Users</string>
+    <string name="menu_my_profile">My Profile</string>
+    <string name="menu_register">Register</string>
+    <string name="menu_sign_out">Sign Out</string>
+    <string name="user_follow">Follow</string>
+    <string name="title_activity_register">Register</string>
+
+    <!-- Strings related to register -->
+    <string name="prompt_email">Email</string>
+    <!--<string name="prompt_password">Password (optional)</string>-->
+    <!--<string name="action_sign_in">Sign in or register</string>-->
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_username">This username is too short (5 or more characters)</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
 </resources>

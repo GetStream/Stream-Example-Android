@@ -2,5 +2,12 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#3346ec</color>
+
+    <color name="stream_black">#de000000</color>
+    <color name="stream_dark_black">#8b000000</color>
+    <color name="stream_dark_gray">#8b000000</color>
+    <color name="stream_button_background">#1a999999</color>
+    <color name="stream_button_text_black">#8a000000</color>
+    <color name="stream_button_text_blue">#304ffe</color>
 </resources>
