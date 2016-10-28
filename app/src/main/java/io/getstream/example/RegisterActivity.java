@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
@@ -25,7 +24,6 @@ import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
@@ -47,8 +45,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.client.HttpResponseException;
 import io.getstream.example.clients.StreamBackendClient;
-import io.getstream.example.utils.NavUpdate;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -314,6 +312,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
             RequestParams reqParams = new RequestParams();
             reqParams.put("email", mEmail);
             reqParams.put("username", mUsername);
+
             StreamBackendClient.post(
                     mContext,
                     "/register",
@@ -332,7 +331,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                                 } else {
                                     JSONArray errors = response.getJSONArray("errors");
                                     userUUID = "";
-                                    error = errors.getJSONObject(0).toString();
+                                    error = errors.getString(0);
                                     Log.i("register-failure", error);
                                     returnStatus = false;
                                 }
@@ -344,11 +343,36 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                             }
                         }
 
-                        public void onFailure(int statusCode, Header[] headers, JSONArray response) {
-                            Log.i("getUsers", "onFailure");
+//                        @Override
+//                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray response) {
+//                            Log.i("register-post-fail-arg0", throwable.toString());
+//                            throwable.printStackTrace();
+//                            Log.i("register-post-fail-arg1", response.toString());
+//                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response) {
+                            Log.i("register-post-fail-code", Integer.toString(statusCode));
+                            Log.i("register-post-fail-thrw", throwable.toString());
+//                            throwable.printStackTrace();
+                            Log.i("register-post-fail-resp", response.toString());
+                            try {
+                                JSONArray errors = response.getJSONArray("errors");
+                                userUUID = "";
+                                Log.i("reg-fail", errors.toString());
+                                Log.i("reg-fail", errors.getString(0));
+                                error = errors.getString(0);
+                                Log.i("register-failure", error);
+                                returnStatus = false;
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Log.i("register-failure", "unknown, look at stack trace");
+                                returnStatus = false;
+                                error = "Unknown error occurred, please try again.";
+                                userUUID = "";
+                            }
                         }
                     });
-
 
             return returnStatus;
         }
@@ -362,6 +386,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
             if (success) {
                 Log.i("register", "background task succeeded!");
                 prefEditor.putString(getString(R.string.pref_authorid), userUUID);
+                prefEditor.commit();
                 toastContent = "Thanks for joining us!";
                 finish();
             } else {

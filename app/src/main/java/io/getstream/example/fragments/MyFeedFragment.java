@@ -1,7 +1,9 @@
 package io.getstream.example.fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +32,7 @@ import io.getstream.example.models.FeedItem;
 public class MyFeedFragment extends Fragment {
     private Context myContext;
     private FeedsAdapter mFeedsAdapter;
+    private String mUserUUID;
 
     private List<FeedItem> feedList;
     public String toastString;
@@ -48,6 +51,9 @@ public class MyFeedFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         toast = new Toast(getActivity().getApplicationContext());
+
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        mUserUUID = sharedPrefs.getString(getString(R.string.pref_authorid), "");
     }
 
     @Override
@@ -64,7 +70,7 @@ public class MyFeedFragment extends Fragment {
 
         StreamBackendClient.get(
                 myContext,
-                "/feed/1234",
+                "/feed/" + mUserUUID,
                 headers.toArray(new Header[headers.size()]),
                 null,
                 new JsonHttpResponseHandler() {
@@ -84,6 +90,13 @@ public class MyFeedFragment extends Fragment {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+                            }
+
+                            if (data.length() == 0) {
+                                String toastContent = "You have no items in your feed, try following others!";
+                                Toast toast = Toast.makeText(getActivity(), toastContent, Toast.LENGTH_LONG);
+                                toast.show();
+
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

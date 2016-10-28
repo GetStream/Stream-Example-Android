@@ -1,14 +1,16 @@
 package io.getstream.example;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -40,7 +42,6 @@ import io.getstream.example.clients.StreamBackendClient;
 import io.getstream.example.fragments.GlobalFeedFragment;
 import io.getstream.example.fragments.MyFeedFragment;
 import io.getstream.example.fragments.UsersFragment;
-import io.getstream.example.R;
 import io.getstream.example.models.FeedItem;
 
 import static io.getstream.example.utils.Gravatar.md5;
@@ -48,19 +49,28 @@ import static io.getstream.example.utils.Gravatar.md5;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final int CONST_ACTIVITY_REGISTER = 1;
+    private static final int CONST_ACTIVITY_PHOTO = 2;
+
+
     private ListView feedList;
     private String title;
     private Fragment fragment;
+    private Intent intent;
+    private String mUserUUID;
+    private SharedPreferences sharedPrefs;
+    private SharedPreferences.Editor sharedprefsEditor;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = preferences.edit();
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedprefsEditor = sharedPrefs.edit();
 
-        String authorID = preferences.getString(getString(R.string.pref_authorid), "");
+        mUserUUID = sharedPrefs.getString(getString(R.string.pref_authorid), "");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -69,8 +79,8 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                intent = new Intent(getApplicationContext(), PhotoIntentActivity.class);
+                startActivityForResult(intent, CONST_ACTIVITY_PHOTO);
             }
         });
 
@@ -80,20 +90,7 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        if (authorID == "") {
-            navigationView.getMenu().findItem(R.id.nav_my_feed).setVisible(false);
-            navigationView.getMenu().findItem(R.id.nav_my_profile).setVisible(false);
-            navigationView.getMenu().findItem(R.id.nav_register).setVisible(true);
-            navigationView.getMenu().findItem(R.id.nav_sign_out).setVisible(false);
-        } else {
-            navigationView.getMenu().findItem(R.id.nav_my_feed).setVisible(true);
-            navigationView.getMenu().findItem(R.id.nav_my_profile).setVisible(true);
-            navigationView.getMenu().findItem(R.id.nav_register).setVisible(false);
-            navigationView.getMenu().findItem(R.id.nav_sign_out).setVisible(true);
-        }
+        setNavByRegistered();
 
         // default view is global feed
         title = getString(R.string.menu_global_feed);
@@ -102,6 +99,28 @@ public class MainActivity extends AppCompatActivity
         ft.replace(R.id.main_container, fragment);
         ft.commit();
         getSupportActionBar().setTitle(title);
+    }
+
+    private void setNavByRegistered() {
+        mUserUUID = sharedPrefs.getString(getString(R.string.pref_authorid), "");
+
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        Menu navMenu = navigationView.getMenu();
+
+        if (mUserUUID.length() == 0) {
+            navMenu.findItem(R.id.nav_take_photo).setVisible(false);
+            navMenu.findItem(R.id.nav_my_feed).setVisible(false);
+            navMenu.findItem(R.id.nav_my_profile).setVisible(false);
+            navMenu.findItem(R.id.nav_register).setVisible(true);
+            navMenu.findItem(R.id.nav_sign_out).setVisible(false);
+        } else {
+            navMenu.findItem(R.id.nav_take_photo).setVisible(true);
+            navMenu.findItem(R.id.nav_my_feed).setVisible(true);
+            navMenu.findItem(R.id.nav_my_profile).setVisible(true);
+            navMenu.findItem(R.id.nav_register).setVisible(false);
+            navMenu.findItem(R.id.nav_sign_out).setVisible(true);
+        }
     }
 
     @Override
@@ -142,9 +161,6 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor pref_edit = pref.edit();
-
         switch (id) {
             default:
             case R.id.nav_global_feed:
@@ -174,22 +190,25 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_register:
                 Log.i("Main-onNavSelected", getString(R.string.menu_register));
                 title = getString(R.string.menu_register);
-                launchActivity(id, this);
+                launchActivity("register", this);
+                Log.i("main", "finished register activity");
+                break;
+
+            case R.id.nav_take_photo:
+                Log.i("Main-onNavSelected", getString(R.string.menu_takephoto));
+                title = getString(R.string.menu_takephoto);
+                launchActivity("photo", this);
                 Log.i("main", "finished register activity");
                 break;
 
             case R.id.nav_sign_out:
                 Log.i("Main-onNavSelected", getString(R.string.menu_sign_out));
-                pref_edit.putString(getString(R.string.pref_authorid), "");
+                sharedprefsEditor.putString(getString(R.string.pref_authorid), "");
+                sharedprefsEditor.commit();
                 title = getString(R.string.menu_global_feed);
                 fragment = new GlobalFeedFragment(getApplicationContext());
+                setNavByRegistered();
                 break;
-
-//            case R.id.nav_sign_out:
-//                Log.i("Main-onNavSelected", getString(R.string.menu_sign_out));
-//                title = getString(R.string.menu_sign_out);
-//                break;
-
         }
 
         if (fragment != null) {
@@ -205,12 +224,46 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    protected void launchActivity(int itemPosition, Context context) {
-        Intent intent;
-        switch (itemPosition) {
-            case R.id.nav_register:
-                intent = new Intent(context, RegisterActivity.class);
-                startActivity(intent);
+    protected void launchActivity(String activity, Context context) {
+        Intent intent = null;
+        int requestCode = 0;
+
+        if (activity.equals("register")) {
+            requestCode = CONST_ACTIVITY_REGISTER;
+            intent = new Intent(context, RegisterActivity.class);
+        }
+        if (activity.equals("photo")) {
+            requestCode = CONST_ACTIVITY_PHOTO;
+            intent = new Intent(context, PhotoIntentActivity.class);
+        }
+
+        TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(this);
+        taskStackBuilder.addParentStack(MainActivity.class);
+        taskStackBuilder.addNextIntent(intent);
+
+        PendingIntent pendingIntent = taskStackBuilder.getPendingIntent(0, PendingIntent.FLAG_ONE_SHOT);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        builder.setContentIntent(pendingIntent);
+
+        if (intent != null) {
+            startActivityForResult(intent, requestCode);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i("main", "main activity is resuming");
+        Log.i("main-req", Integer.toString(requestCode));
+        Log.i("main-res", Integer.toString(resultCode));
+
+        switch (requestCode) {
+            case CONST_ACTIVITY_PHOTO:
+                Log.i("main", "returned from taking a photo");
+                break;
+            case CONST_ACTIVITY_REGISTER:
+                Log.i("main", "returned from registering");
+                setNavByRegistered();
                 break;
         }
     }
@@ -229,9 +282,9 @@ public class MainActivity extends AppCompatActivity
 //        whichScreen = "feed_item";
 //        whichScreen = "user_profile";
 
-//        String authorID = preferences.getString(getString(R.string.pref_authorid), "");
-//        String authorEmail = preferences.getString(getString(R.string.pref_authoremail), "");
-//        String authorUsername = preferences.getString(getString(R.string.pref_authorname), "");
+//        String authorID = sharedPrefs.getString(getString(R.string.pref_authorid), "");
+//        String authorEmail = sharedPrefs.getString(getString(R.string.pref_authoremail), "");
+//        String authorUsername = sharedPrefs.getString(getString(R.string.pref_authorname), "");
 
         if (whichScreen == "register") {
             setContentView(R.layout.register);

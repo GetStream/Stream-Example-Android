@@ -1,6 +1,8 @@
 package io.getstream.example.clients;
 
 import android.content.Context;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.loopj.android.http.SyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -31,7 +33,8 @@ public class StreamBackendClient {
             Context context,
             String url,
             RequestParams params,
-            AsyncHttpResponseHandler responseHandler) {
+            JsonHttpResponseHandler responseHandler) {
+
         syncClient.post(context, getAbsoluteUrl(url), params, responseHandler);
     }
 

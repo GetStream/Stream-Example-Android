@@ -9,6 +9,9 @@
             android:id="@+id/nav_my_feed"
             android:title="@string/menu_my_feed" />
         <item
+            android:id="@+id/nav_take_photo"
+            android:title="@string/menu_takephoto" />
+        <item
             android:id="@+id/nav_users"
             android:title="@string/menu_users" />
         <item
