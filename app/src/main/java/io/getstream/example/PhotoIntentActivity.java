@@ -3,12 +3,14 @@ package io.getstream.example;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
@@ -17,18 +19,32 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.message.BasicHeader;
+import io.getstream.example.clients.StreamBackendClient;
 import io.getstream.example.factories.AlbumStorageDirFactory;
 import io.getstream.example.factories.BaseAlbumDirFactory;
 import io.getstream.example.factories.FroyoAlbumDirFactory;
 
 public class PhotoIntentActivity extends Activity {
+    private Context myContext = MyApplication.getAppContext();
+    private SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(myContext);
+    private String myUUID = sharedPrefs.getString(myContext.getString(R.string.pref_authorid), "");
 
     private static final int ACTION_TAKE_PHOTO_B = 1;
 
@@ -129,9 +145,47 @@ public class PhotoIntentActivity extends Activity {
         public void onClick(View v) {
             Log.i("camera", "upload button clicked");
 
+            uploadPhoto(v, myUUID);
             finish();
         }
     };
+
+    private void uploadPhoto(View v, String userUUID) {
+        final String finalUUID = userUUID;
+
+        List<Header> headers = new ArrayList<Header>();
+        headers.add(new BasicHeader("Accept", "application/json"));
+
+        StreamBackendClient.putImage(
+                myContext,
+                myUUID,
+                mCurrentPhotoPath,
+                new JsonHttpResponseHandler() {
+                    // { "status": "processing", "uuid": "fc00d974-f167-41cc-b1da-705c6f4b643a" }
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        Toast toast;
+
+                        try {
+                            String data = response.getString("status");
+                            Log.i("upload", "data: " + data);
+                            if (data.equals("processing")) {
+                                Log.i("returnstatus", "true");
+
+                                toast = Toast.makeText(MyApplication.getAppContext(), "photo is uploading", Toast.LENGTH_LONG);
+                                toast.show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    public void onFailure(int statusCode, Header[] headers, JSONArray response) {
+                        Log.i("photoupload", "onFailure");
+                        // TODO should handle error conditions
+                    }
+                });
+    }
 
     /**
      * Called when the activity is first created.
