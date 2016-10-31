@@ -86,7 +86,6 @@ public class MyFeedFragment extends Fragment {
 
                             for (int i = 0; i < data.length(); i++) {
                                 try {
-                                    Log.i("onSuccess", "adding item");
                                     feedAdapter.add(new FeedItem(data.getJSONObject(i)));
                                 } catch (JSONException e) {
                                     e.printStackTrace();

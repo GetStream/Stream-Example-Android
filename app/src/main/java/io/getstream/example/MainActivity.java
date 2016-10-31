@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity
     private Fragment fragment;
     private Intent intent;
     private String mUserUUID;
+
     private SharedPreferences sharedPrefs;
     private SharedPreferences.Editor sharedprefsEditor;
     private NavigationView navigationView;
@@ -335,7 +336,7 @@ public class MainActivity extends AppCompatActivity
 
         StreamBackendClient.get(
                 this,
-                "/feed/global",
+                "/feed/global?uuid=" + mUserUUID,
                 headers.toArray(new Header[headers.size()]),
                 null,
                 new JsonHttpResponseHandler() {
@@ -350,7 +351,6 @@ public class MainActivity extends AppCompatActivity
 
                             for (int i = 0; i < data.length(); i++) {
                                 try {
-                                    Log.i("onSuccess", "adding item");
                                     feedAdapter.add(new FeedItem(data.getJSONObject(i)));
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -379,7 +379,7 @@ public class MainActivity extends AppCompatActivity
 
         StreamBackendClient.get(
                 this,
-                "/feed/global",
+                "/feed/global?uuid=" + mUserUUID,
                 headers.toArray(new Header[headers.size()]),
                 null,
                 new JsonHttpResponseHandler() {
@@ -395,7 +395,6 @@ public class MainActivity extends AppCompatActivity
 
                             for (int i = 0; i < data.length(); i++) {
                                 try {
-                                    Log.i("onSuccess", "adding item");
                                     FeedItem item = new FeedItem(data.getJSONObject(i));
                                     item.setAuthorEmail("");
                                     item.setAuthorName("");

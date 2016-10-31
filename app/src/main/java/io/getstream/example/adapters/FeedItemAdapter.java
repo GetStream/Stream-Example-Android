@@ -1,41 +1,61 @@
 package io.getstream.example.adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 
-import java.io.InputStream;
-import java.math.BigInteger;
-import java.nio.charset.Charset;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.message.BasicHeader;
+import io.getstream.example.MyApplication;
 import io.getstream.example.R;
+import io.getstream.example.clients.StreamBackendClient;
 import io.getstream.example.models.FeedItem;
 
 import static io.getstream.example.utils.Gravatar.md5;
 
 
 public class FeedItemAdapter extends ArrayAdapter<FeedItem> {
-    Context myContext;
+    private Context myContext;
+    private String myUUID = "" ;
+    private String authorUUID;
+    private SharedPreferences sharedPrefs;
+    private Toast toast;
+
     private static class ViewHolder {
         TextView author_name;
         TextView created_date;
         ImageView photoImage;
         ImageView profileImage;
+        TextView photoLikeCount;
+        Button btnLikePhoto;
+        Button btnFollowAuthor;
     }
 
     public FeedItemAdapter(Context context, ArrayList<FeedItem> feedItems) {
         super(context, R.layout.feed_item, feedItems);
-        this.myContext = context;
+        myContext = context;
+        toast = new Toast(MyApplication.getAppContext());
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getAppContext());
+        myUUID = sharedPrefs.getString(myContext.getString(R.string.pref_authorid), "");
     }
 
     @Override
@@ -53,6 +73,9 @@ public class FeedItemAdapter extends ArrayAdapter<FeedItem> {
             viewHolder.created_date = (TextView) convertView.findViewById(R.id.feed_item_created_date);
             viewHolder.photoImage = (ImageView) convertView.findViewById(R.id.feed_item_photo_image);
             viewHolder.profileImage = (ImageView) convertView.findViewById(R.id.feed_item_profile_image);
+            viewHolder.photoLikeCount = (TextView) convertView.findViewById(R.id.feed_item_likes);
+            viewHolder.btnLikePhoto = (Button) convertView.findViewById(R.id.feeditem_like_button);
+            viewHolder.btnFollowAuthor = (Button) convertView.findViewById(R.id.feed_follow_button);
 
             convertView.setTag(viewHolder);
         } else {
@@ -61,6 +84,53 @@ public class FeedItemAdapter extends ArrayAdapter<FeedItem> {
 
         viewHolder.author_name.setText(feed_item.getAuthorName());
         viewHolder.created_date.setText(feed_item.getCreatedDate());
+        viewHolder.photoLikeCount.setText(Integer.toString(feed_item.getPhotoLikes()) + " likes");
+
+        Log.i("feeditem", "-----------------------");
+
+        authorUUID = feed_item.getAuthorId();
+        Log.i("feeditem", "myUUID:"+myUUID);
+        Log.i("feeditem", "authorUUID:"+authorUUID);
+
+        Boolean iFollowAuthor = feed_item.getIFollowAuthor();
+        Boolean iLikePhoto = feed_item.getILikePhoto();
+
+        if (iLikePhoto) {
+            Log.i("doILikePhoto", "true");
+            // turn star on since we like this already
+            viewHolder.btnLikePhoto.setBackgroundResource(android.R.drawable.btn_star_big_on);
+            // set click handler to unlike
+            viewHolder.btnLikePhoto.setOnClickListener(
+                    new LikeClickListener("unlike", feed_item.getPhotoUUID())
+            );
+        } else {
+            Log.i("doILikePhoto", "false");
+            // turn star off since we don't like this yet
+            viewHolder.btnLikePhoto.setBackgroundResource(android.R.drawable.btn_star_big_off);
+            // set click handler to like
+            viewHolder.btnLikePhoto.setOnClickListener(
+                    new LikeClickListener("like", feed_item.getPhotoUUID())
+            );
+        }
+
+        Log.i("feeditem", "myuuid:"+myUUID+", authorUUID:"+authorUUID);
+        if (authorUUID.equals(myUUID)) {
+            viewHolder.btnFollowAuthor.setVisibility(View.GONE);
+        } else {
+            Log.i("feeditem", "do i follow:" + iFollowAuthor.toString());
+
+            if (iFollowAuthor) {
+                viewHolder.btnFollowAuthor.setText(R.string.user_unfollow);
+                viewHolder.btnFollowAuthor.setOnClickListener(
+                    new FollowClickListener(R.string.user_unfollow, feed_item.getAuthorName(), feed_item.getAuthorId())
+                );
+            } else {
+                viewHolder.btnFollowAuthor.setText(R.string.user_follow);
+                viewHolder.btnFollowAuthor.setOnClickListener(
+                    new FollowClickListener(R.string.user_follow, feed_item.getAuthorName(), feed_item.getAuthorId())
+                );
+            }
+        }
 
         Picasso.with(myContext)
                 .load(feed_item.getPhotoUrl())
@@ -76,5 +146,160 @@ public class FeedItemAdapter extends ArrayAdapter<FeedItem> {
                 .into(viewHolder.profileImage);
 
         return convertView;
+    }
+
+    public class FollowClickListener implements View.OnClickListener {
+        int Action;
+        String Username;
+        String UUID;
+
+        public FollowClickListener(int resActionString, String username, String UUID) {
+            this.Action = resActionString;
+            this.Username = username;
+            this.UUID = UUID;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Boolean success;
+
+            Log.i("follow-click", "onClick called");
+            Log.i("follow-click", Integer.toString(this.Action));
+            Button followButton = (Button) v.findViewById(R.id.feed_follow_button);
+
+            switch (this.Action) {
+                default:
+                    Log.i("followBtn.click", "no idea what you're doing with " + this.Username);
+                    break;
+                case R.string.user_follow:
+                    Log.i("followBtn.click", "following " + this.Username);
+                    followUser(v, "follow", this.Username, this.UUID);
+                    followButton.setText(MyApplication.getAppContext().getString(R.string.user_unfollow));
+                    followButton.setOnClickListener(
+                            new FollowClickListener(R.string.user_unfollow, this.Username, this.UUID));
+                    break;
+                case R.string.user_unfollow:
+                    Log.i("followBtn.click", "unfollowing " + this.Username);
+                    followUser(v, "unfollow", this.Username, this.UUID);
+                    followButton.setText(MyApplication.getAppContext().getString(R.string.user_follow));
+                    followButton.setOnClickListener(
+                            new FollowClickListener(R.string.user_follow, this.Username, this.UUID));
+                    break;
+            }
+        }
+
+        private void followUser(View v, String action, String username, String uuid) {
+            final String finalAction = action;
+            final String finalUsername = username;
+            final String finalUUID = uuid;
+
+            List<Header> headers = new ArrayList<Header>();
+            headers.add(new BasicHeader("Accept", "application/json"));
+
+            StreamBackendClient.get(
+                    myContext,
+                    "/" + action + "/" + uuid + "?uuid=" + myUUID,
+                    headers.toArray(new Header[headers.size()]),
+                    null,
+                    new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            try {
+                                String data = response.getString("status");
+                                Log.i("user " + finalAction, "data: " + data);
+                                if (data.equals("success")) {
+                                    Log.i("returnstatus", "true");
+
+                                    String toastPrefix = "now following ";
+                                    if (finalAction.equals("unfollow")) {
+                                        toastPrefix = "no longer following ";
+                                    }
+                                    toast = Toast.makeText(MyApplication.getAppContext(), toastPrefix+finalUsername, Toast.LENGTH_LONG);
+                                    toast.show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        public void onFailure(int statusCode, Header[] headers, JSONArray response) {
+                            Log.i("getGlobalFeed", "onFailure");
+                            // TODO should handle error conditions
+                            Log.i("follow", "failure");
+                        }
+                    });
+        }
+    }
+    public class LikeClickListener implements View.OnClickListener {
+        String Action;
+        String UUID;
+
+        public LikeClickListener(String action, String UUID) {
+            this.Action = action;
+            this.UUID = UUID;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Boolean success;
+
+            Log.i("like-click", "onClick called");
+            Log.i("like-click", this.Action);
+            Button likeButton = (Button) v.findViewById(R.id.feeditem_like_button);
+
+            switch (this.Action) {
+                default:
+                    Log.i("followBtn.click", "no idea what you're doing with " + this.UUID);
+                    break;
+                case "like":
+                    Log.i("followBtn.click", "liking " + this.UUID);
+                    likePhoto(v, "like", this.UUID);
+                    likeButton.setBackgroundResource(android.R.drawable.btn_star_big_on);
+                    likeButton.setOnClickListener(new LikeClickListener("unlike", UUID));
+                    break;
+                case "unlike":
+                    Log.i("followBtn.click", "unliking " + this.UUID);
+                    likePhoto(v, "unlike", this.UUID);
+                    likeButton.setBackgroundResource(android.R.drawable.btn_star_big_off);
+                    likeButton.setOnClickListener(new LikeClickListener("like", UUID));
+                    break;
+            }
+        }
+
+        private void likePhoto(View v, String action, String uuid) {
+            final String finalAction = action;
+            final String finalUUID = uuid;
+
+            List<Header> headers = new ArrayList<Header>();
+            headers.add(new BasicHeader("Accept", "application/json"));
+
+            StreamBackendClient.get(
+                    myContext,
+                    "/" + action + "photo/" + uuid + "?uuid=" + myUUID,
+                    headers.toArray(new Header[headers.size()]),
+                    null,
+                    new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            try {
+                                String data = response.getString("status");
+                                Log.i("user " + finalAction, "data: " + data);
+                                if (data.equals("success")) {
+                                    Log.i("returnstatus", "true");
+                                    toast = Toast.makeText(MyApplication.getAppContext(), finalAction+"d", Toast.LENGTH_LONG);
+                                    toast.show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        public void onFailure(int statusCode, Header[] headers, JSONArray response) {
+                            Log.i("getGlobalFeed", "onFailure");
+                            // TODO should handle error conditions
+                            Log.i("follow", "failure");
+                        }
+                    });
+        }
     }
 }

@@ -1,7 +1,9 @@
 package io.getstream.example.fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +34,8 @@ import io.getstream.example.models.FeedItem;
 public class GlobalFeedFragment extends Fragment {
     private Context myContext;
     private FeedsAdapter mFeedsAdapter;
+    private String mUserUUID;
+    private SharedPreferences sharedPrefs;
 
     private List<FeedItem> feedList;
     public String toastString;
@@ -50,6 +54,8 @@ public class GlobalFeedFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         toast = new Toast(getActivity().getApplicationContext());
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(myContext);
+        mUserUUID = sharedPrefs.getString(getString(R.string.pref_authorid), "");
     }
 
     @Override
@@ -66,7 +72,7 @@ public class GlobalFeedFragment extends Fragment {
 
         StreamBackendClient.get(
                 myContext,
-                "/feed/global",
+                "/feed/global?uuid="+mUserUUID,
                 headers.toArray(new Header[headers.size()]),
                 null,
                 new JsonHttpResponseHandler() {
@@ -81,7 +87,7 @@ public class GlobalFeedFragment extends Fragment {
 
                             for (int i = 0; i < data.length(); i++) {
                                 try {
-                                    Log.i("onSuccess", "adding item");
+                                    Log.i("feeditem-json", data.getJSONObject(i).toString());
                                     feedAdapter.add(new FeedItem(data.getJSONObject(i)));
                                 } catch (JSONException e) {
                                     e.printStackTrace();

@@ -86,7 +86,6 @@ public class UsersFragment extends Fragment {
 
                             for (int i = 0; i < data.length(); i++) {
                                 try {
-                                    Log.i("onSuccess", "adding item");
                                     userAdapter.add(new User(data.getJSONObject(i)));
                                 } catch (JSONException e) {
                                     e.printStackTrace();
