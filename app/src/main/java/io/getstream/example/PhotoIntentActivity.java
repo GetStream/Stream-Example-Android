@@ -83,6 +83,9 @@ public class PhotoIntentActivity extends Activity {
         int targetW = mImageView.getWidth();
         int targetH = mImageView.getHeight();
 
+        Log.i("setPic", "w:" + Integer.toString(targetW));
+        Log.i("setPic", "h:" + Integer.toString(targetH));
+
 		/* Get the size of the image */
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
@@ -144,7 +147,6 @@ public class PhotoIntentActivity extends Activity {
         @Override
         public void onClick(View v) {
             Log.i("camera", "upload button clicked");
-
             uploadPhoto(v, myUUID);
             finish();
         }
@@ -198,14 +200,14 @@ public class PhotoIntentActivity extends Activity {
         mImageView = (ImageView) findViewById(R.id.thumbnail_image);
         mImageBitmap = null;
 
-        Button picBtn = (Button) findViewById(R.id.btnIntend);
+        Button picBtn = (Button) findViewById(R.id.btnTakePhoto);
         setBtnListenerOrDisable(
                 picBtn,
                 mTakePicOnClickListener,
                 MediaStore.ACTION_IMAGE_CAPTURE
         );
 
-        mBtnUpload = (Button) findViewById(R.id.btnUpload);
+        mBtnUpload = (Button) findViewById(R.id.btnUploadPhoto);
         mBtnUpload.setVisibility(View.INVISIBLE);
         setBtnListenerOrDisable(
                 mBtnUpload,
@@ -234,9 +236,25 @@ public class PhotoIntentActivity extends Activity {
             setPic();
 
         } else if (requestCode == 1 && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            mImageView.setImageBitmap(imageBitmap);
+//            Bundle extras = data.getExtras();
+//            Bitmap imageBitmap = (Bitmap) extras.get("data");
+//            mImageView.setImageBitmap(imageBitmap);
+//            mImageView.setVisibility(View.VISIBLE);
+//            mBtnUpload.setVisibility(View.VISIBLE);
+
+            Log.i("photo-act-result", "file location: " + mCurrentPhotoPath);
+            Log.i("photo-act-result", "img view width:" + Integer.toString(mImageView.getWidth()));
+            Log.i("photo-act-result", "img view height:" + Integer.toString(mImageView.getHeight()));
+
+            File image = new File(mCurrentPhotoPath);
+            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+            Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath(),bmOptions);
+
+            Log.i("photo-act-result", "img width:" + Integer.toString(bitmap.getWidth()));
+            Log.i("photo-act-result", "img height:" + Integer.toString(bitmap.getHeight()));
+
+            bitmap = Bitmap.createScaledBitmap(bitmap, mImageView.getWidth(), mImageView.getHeight(), true);
+            mImageView.setImageBitmap(bitmap);
             mImageView.setVisibility(View.VISIBLE);
             mBtnUpload.setVisibility(View.VISIBLE);
         }

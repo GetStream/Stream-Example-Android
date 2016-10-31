@@ -1,8 +1,11 @@
 <resources>
     <string name="pref_authorid">streamUserUUID</string>
+    <string name="pref_author_email">streamUserEmail</string>
+    <string name="pref_author_username">streamUsername</string>
+    <string name="pref_author_gravatar">streamUserGravatar</string>
 
-    <!--<string name="backend_url">"http://go.sl.gtstrm.com:3000"</string>-->
-    <string name="backend_url">"http://10.0.2.2:3000"</string>
+    <string name="backend_url">"http://go.sl.gtstrm.com:3000"</string>
+    <!--<string name="backend_url">"http://10.0.2.2:3000"</string>-->
 
     <string name="app_name">Stream.io Example</string>
 
@@ -60,5 +63,7 @@
     <string name="cannot">Cannot</string>
     <string name="btn_upload_text">Upload to Stream</string>
     <string name="photo_thumbnail_desc">image thumbnail</string>
+    <string name="your_username_here">Your Username Here</string>
+    <string name="your_email_address_com">your.email@address.com</string>
 
 </resources>

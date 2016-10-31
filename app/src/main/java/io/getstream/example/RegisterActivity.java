@@ -49,6 +49,7 @@ import cz.msebera.android.httpclient.client.HttpResponseException;
 import io.getstream.example.clients.StreamBackendClient;
 
 import static android.Manifest.permission.READ_CONTACTS;
+import static io.getstream.example.utils.Gravatar.md5;
 
 public class RegisterActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
     private static final int REQUEST_READ_CONTACTS = 0;
@@ -399,6 +400,15 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
             if (success) {
                 Log.i("register", "background task succeeded!");
                 prefEditor.putString(getString(R.string.pref_authorid), userUUID);
+                Log.i("reg-post", "email:" + mEmail);
+                prefEditor.putString(getString(R.string.pref_author_email), mEmail);
+                Log.i("reg-post", "username:" + mUsername);
+                prefEditor.putString(getString(R.string.pref_author_username), mUsername);
+
+                String gravatarUrl = "http://www.gravatar.com/avatar/" + md5(mEmail) + "?s=204&d=404";
+                prefEditor.putString(getString(R.string.pref_author_gravatar), gravatarUrl);
+                Log.i("reg-post", "gravatar:" + gravatarUrl);
+
                 prefEditor.commit();
                 toastContent = "Thanks for joining us!";
                 Toast toast = Toast.makeText(mContext, toastContent, Toast.LENGTH_LONG);

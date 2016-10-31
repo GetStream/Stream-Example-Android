@@ -45,10 +45,12 @@ import io.getstream.example.fragments.UsersFragment;
 import io.getstream.example.models.FeedItem;
 
 import static io.getstream.example.utils.Gravatar.md5;
+import static io.getstream.example.utils.Gravatar.pickRandomAnimalAvatar;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    Context myContext;
     private static final int CONST_ACTIVITY_REGISTER = 1;
     private static final int CONST_ACTIVITY_PHOTO = 2;
 
@@ -56,7 +58,11 @@ public class MainActivity extends AppCompatActivity
     private String title;
     private Fragment fragment;
     private Intent intent;
+
     private String mUserUUID;
+    private String mUsername;
+    private String mEmail;
+    private String mGravatar;
 
     private SharedPreferences sharedPrefs;
     private SharedPreferences.Editor sharedprefsEditor;
@@ -67,6 +73,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        myContext = this.getApplicationContext();
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         sharedprefsEditor = sharedPrefs.edit();
 
@@ -80,8 +87,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent = new Intent(getApplicationContext(), PhotoIntentActivity.class);
-                startActivityForResult(intent, CONST_ACTIVITY_PHOTO);
+                launchActivity("photo", getApplicationContext());
             }
         });
 
@@ -103,12 +109,29 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setNavByRegistered() {
+        TextView t;
+        ImageView i;
+
         mUserUUID = sharedPrefs.getString(getString(R.string.pref_authorid), "");
-        Log.i("setNav", "mUserUUID from shared prefs: " + mUserUUID);
+        mUsername = sharedPrefs.getString(getString(R.string.pref_author_username), getString(R.string.your_username_here));
+        mEmail = sharedPrefs.getString(getString(R.string.pref_author_email), getString(R.string.your_email_address_com));
+        mGravatar = sharedPrefs.getString(getString(R.string.pref_author_gravatar), "");
+
+        Log.i("main-nav", mUserUUID);
+        Log.i("main-nav", mUsername);
+        Log.i("main-nav", mEmail);
+        Log.i("main-nav", mGravatar);
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         Menu navMenu = navigationView.getMenu();
+        View navHeader =  navigationView.getHeaderView(0);
+
+        t = (TextView) navHeader.findViewById(R.id.nav_profile_email);
+        t.setText(mEmail);
+        t = (TextView) navHeader.findViewById(R.id.nav_profile_username);
+        t.setText(mUsername);
+        i = (ImageView) navHeader.findViewById(R.id.nav_profile_image);
 
         if (mUserUUID.length() == 0) {
             navMenu.findItem(R.id.nav_take_photo).setVisible(false);
@@ -116,12 +139,19 @@ public class MainActivity extends AppCompatActivity
             navMenu.findItem(R.id.nav_my_profile).setVisible(false);
             navMenu.findItem(R.id.nav_register).setVisible(true);
             navMenu.findItem(R.id.nav_sign_out).setVisible(false);
+            i.setImageResource(android.R.drawable.sym_def_app_icon);
         } else {
             navMenu.findItem(R.id.nav_take_photo).setVisible(true);
             navMenu.findItem(R.id.nav_my_feed).setVisible(true);
             navMenu.findItem(R.id.nav_my_profile).setVisible(true);
             navMenu.findItem(R.id.nav_register).setVisible(false);
             navMenu.findItem(R.id.nav_sign_out).setVisible(true);
+            if (mGravatar.length() > 0) {
+                Picasso.with(this)
+                        .load(mGravatar)
+                        .placeholder(pickRandomAnimalAvatar())
+                        .into(i);
+            }
         }
     }
 
@@ -305,7 +335,7 @@ public class MainActivity extends AppCompatActivity
             Log.i("gravatar url", gravatarUrl);
             Picasso.with(MainActivity.this)
                     .load(gravatarUrl)
-                    .placeholder(R.drawable.artist_placeholder)
+                    .placeholder(pickRandomAnimalAvatar())
                     .into((ImageView) this.findViewById(R.id.profile_profile_image));
             TextView pName = (TextView) this.findViewById(R.id.profile_author_name);
             pName.setText("iandouglas736");

@@ -31,6 +31,7 @@ import io.getstream.example.clients.StreamBackendClient;
 import io.getstream.example.models.FeedItem;
 
 import static io.getstream.example.utils.Gravatar.md5;
+import static io.getstream.example.utils.Gravatar.pickRandomAnimalAvatar;
 
 
 public class FeedItemAdapter extends ArrayAdapter<FeedItem> {
@@ -95,40 +96,50 @@ public class FeedItemAdapter extends ArrayAdapter<FeedItem> {
         Boolean iFollowAuthor = feed_item.getIFollowAuthor();
         Boolean iLikePhoto = feed_item.getILikePhoto();
 
-        if (iLikePhoto) {
-            Log.i("doILikePhoto", "true");
-            // turn star on since we like this already
-            viewHolder.btnLikePhoto.setBackgroundResource(android.R.drawable.btn_star_big_on);
-            // set click handler to unlike
-            viewHolder.btnLikePhoto.setOnClickListener(
-                    new LikeClickListener("unlike", feed_item.getPhotoUUID())
-            );
-        } else {
-            Log.i("doILikePhoto", "false");
-            // turn star off since we don't like this yet
+        if (myUUID.equals("")) {
+            // no stars lit up if you're not logged in
             viewHolder.btnLikePhoto.setBackgroundResource(android.R.drawable.btn_star_big_off);
-            // set click handler to like
-            viewHolder.btnLikePhoto.setOnClickListener(
-                    new LikeClickListener("like", feed_item.getPhotoUUID())
-            );
+        } else {
+            if (iLikePhoto) {
+                Log.i("doILikePhoto", "true");
+                // turn star on since we like this already
+                viewHolder.btnLikePhoto.setBackgroundResource(android.R.drawable.btn_star_big_on);
+                // set click handler to unlike
+                viewHolder.btnLikePhoto.setOnClickListener(
+                        new LikeClickListener("unlike", feed_item.getPhotoUUID())
+                );
+            } else {
+                Log.i("doILikePhoto", "false");
+                // turn star off since we don't like this yet
+                viewHolder.btnLikePhoto.setBackgroundResource(android.R.drawable.btn_star_big_off);
+                // set click handler to like
+                viewHolder.btnLikePhoto.setOnClickListener(
+                        new LikeClickListener("like", feed_item.getPhotoUUID())
+                );
+            }
         }
 
         Log.i("feeditem", "myuuid:"+myUUID+", authorUUID:"+authorUUID);
-        if (authorUUID.equals(myUUID)) {
+        if (myUUID.equals("")) {
+            // no follow/unfollow buttons if you're not logged in
             viewHolder.btnFollowAuthor.setVisibility(View.GONE);
         } else {
-            Log.i("feeditem", "do i follow:" + iFollowAuthor.toString());
-
-            if (iFollowAuthor) {
-                viewHolder.btnFollowAuthor.setText(R.string.user_unfollow);
-                viewHolder.btnFollowAuthor.setOnClickListener(
-                    new FollowClickListener(R.string.user_unfollow, feed_item.getAuthorName(), feed_item.getAuthorId())
-                );
+            if (authorUUID.equals(myUUID)) {
+                viewHolder.btnFollowAuthor.setVisibility(View.GONE);
             } else {
-                viewHolder.btnFollowAuthor.setText(R.string.user_follow);
-                viewHolder.btnFollowAuthor.setOnClickListener(
-                    new FollowClickListener(R.string.user_follow, feed_item.getAuthorName(), feed_item.getAuthorId())
-                );
+                Log.i("feeditem", "do i follow:" + iFollowAuthor.toString());
+
+                if (iFollowAuthor) {
+                    viewHolder.btnFollowAuthor.setText(R.string.user_unfollow);
+                    viewHolder.btnFollowAuthor.setOnClickListener(
+                            new FollowClickListener(R.string.user_unfollow, feed_item.getAuthorName(), feed_item.getAuthorId())
+                    );
+                } else {
+                    viewHolder.btnFollowAuthor.setText(R.string.user_follow);
+                    viewHolder.btnFollowAuthor.setOnClickListener(
+                            new FollowClickListener(R.string.user_follow, feed_item.getAuthorName(), feed_item.getAuthorId())
+                    );
+                }
             }
         }
 
@@ -142,7 +153,7 @@ public class FeedItemAdapter extends ArrayAdapter<FeedItem> {
         Log.i("gravatar url", gravatarUrl);
         Picasso.with(myContext)
                 .load(gravatarUrl)
-                .placeholder(R.drawable.artist_placeholder)
+                .placeholder(pickRandomAnimalAvatar())
                 .into(viewHolder.profileImage);
 
         return convertView;

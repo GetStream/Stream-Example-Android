@@ -34,6 +34,7 @@ import io.getstream.example.clients.StreamBackendClient;
 import io.getstream.example.models.User;
 
 import static io.getstream.example.utils.Gravatar.md5;
+import static io.getstream.example.utils.Gravatar.pickRandomAnimalAvatar;
 
 public class UserAdapter extends ArrayAdapter<User> {
     Context myContext;
@@ -87,7 +88,7 @@ public class UserAdapter extends ArrayAdapter<User> {
         Log.i("gravatar url", gravatarUrl);
         Picasso.with(myContext)
                 .load(gravatarUrl)
-                .placeholder(R.drawable.artist_placeholder)
+                .placeholder(pickRandomAnimalAvatar())
                 .into(viewHolder.profileImage);
 
         if (user.getUUID().equals(myUUID)) {
