@@ -1,7 +1,9 @@
 package io.getstream.example.fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,18 +23,22 @@ import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.message.BasicHeader;
+import io.getstream.example.MyApplication;
 import io.getstream.example.R;
 import io.getstream.example.adapters.UserAdapter;
 import io.getstream.example.clients.StreamBackendClient;
 import io.getstream.example.models.User;
 
 public class UsersFragment extends Fragment {
-    private Context myContext;
+    public Context myContext;
     private UserAdapter mUserAdapter;
+    private String myUUID = "" ;
 
     private List<User> userList;
     public String toastString;
     private Toast toast;
+    private SharedPreferences sharedPrefs;
+
 
     public UsersFragment() {
         // you don't want this one
@@ -47,6 +53,8 @@ public class UsersFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         toast = new Toast(getActivity().getApplicationContext());
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getAppContext());
+        myUUID = sharedPrefs.getString(getString(R.string.pref_authorid), "");
     }
 
     @Override
@@ -63,7 +71,7 @@ public class UsersFragment extends Fragment {
 
         StreamBackendClient.get(
                 myContext,
-                "/users",
+                "/users?uuid=" + myUUID,
                 headers.toArray(new Header[headers.size()]),
                 null,
                 new JsonHttpResponseHandler() {

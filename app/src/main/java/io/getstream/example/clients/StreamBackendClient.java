@@ -11,10 +11,12 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import cz.msebera.android.httpclient.Header;
+import io.getstream.example.MyApplication;
+import io.getstream.example.R;
 
 
 public class StreamBackendClient {
-    private static final String BASE_URL = "http://go.sl.gtstrm.com:3000";
+    private static final String BASE_URL = MyApplication.getAppContext().getString(R.string.backend_url);
 
     private static AsyncHttpClient asyncClient = new AsyncHttpClient();
     private static SyncHttpClient syncClient = new SyncHttpClient();
@@ -27,6 +29,16 @@ public class StreamBackendClient {
             AsyncHttpResponseHandler responseHandler) {
 
         asyncClient.get(context, getAbsoluteUrl(url), headers, params, responseHandler);
+    }
+
+    public static void getSynchronously(
+            Context context,
+            String url,
+            Header[] headers,
+            RequestParams params,
+            AsyncHttpResponseHandler responseHandler) {
+
+        syncClient.get(context, getAbsoluteUrl(url), headers, params, responseHandler);
     }
 
     public static void post(

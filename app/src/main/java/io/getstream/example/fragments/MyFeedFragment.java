@@ -54,6 +54,7 @@ public class MyFeedFragment extends Fragment {
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         mUserUUID = sharedPrefs.getString(getString(R.string.pref_authorid), "");
+        Log.i("myFeed-onCreate", "mUserUUID from shared prefs: " + mUserUUID);
     }
 
     @Override

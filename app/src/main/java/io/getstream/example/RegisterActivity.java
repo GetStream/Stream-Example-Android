@@ -105,46 +105,6 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         mProgressView = findViewById(R.id.login_progress);
     }
 
-    private void populateAutoComplete() {
-        if (!mayRequestContacts()) {
-            return;
-        }
-
-        getLoaderManager().initLoader(0, null, this);
-    }
-
-    private boolean mayRequestContacts() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
-        }
-        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-                        }
-                    });
-        } else {
-            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-        }
-        return false;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_READ_CONTACTS) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                populateAutoComplete();
-            }
-        }
-    }
-
     private void attemptLogin() {
         if (mAuthTask != null) {
             return;
@@ -199,7 +159,47 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
     private boolean isUsernameValid(String username) {
         //TODO: Replace this with your own logic
-        return username.length() > 3;
+        return username.length() >= 3;
+    }
+
+    private void populateAutoComplete() {
+        if (!mayRequestContacts()) {
+            return;
+        }
+
+        getLoaderManager().initLoader(0, null, this);
+    }
+
+    private boolean mayRequestContacts() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return true;
+        }
+        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }
+        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
+            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+                    .setAction(android.R.string.ok, new View.OnClickListener() {
+                        @Override
+                        @TargetApi(Build.VERSION_CODES.M)
+                        public void onClick(View v) {
+                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
+                        }
+                    });
+        } else {
+            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
+        }
+        return false;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_READ_CONTACTS) {
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                populateAutoComplete();
+            }
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
@@ -321,7 +321,8 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             JSONObject j;
-
+                            Log.i("register-onsuccess", Integer.toString(statusCode));
+                            Log.i("register-onsuccess", response.toString());
                             try {
                                 String data = response.getString("uuid");
                                 if (data.length() > 0) {
@@ -340,6 +341,18 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                                 Log.i("register-failure", "unknown, look at stack trace");
                                 returnStatus = false;
                                 userUUID = "";
+                                try {
+                                    JSONArray errors = response.getJSONArray("errors");
+                                    userUUID = "";
+                                    error = errors.getString(0);
+                                    Log.i("register-failure", error);
+                                    returnStatus = false;
+                                } catch (JSONException e2) {
+                                    e2.printStackTrace();
+                                    Log.i("register-failure", "unknown, look at stack trace");
+                                    returnStatus = false;
+                                    userUUID = "";
+                                }
                             }
                         }
 
@@ -388,16 +401,15 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                 prefEditor.putString(getString(R.string.pref_authorid), userUUID);
                 prefEditor.commit();
                 toastContent = "Thanks for joining us!";
+                Toast toast = Toast.makeText(mContext, toastContent, Toast.LENGTH_LONG);
+                toast.show();
                 finish();
             } else {
                 Log.i("register", "background task did not succeed");
                 toastContent = error;
+                Toast toast = Toast.makeText(mContext, toastContent, Toast.LENGTH_LONG);
+                toast.show();
             }
-
-            Toast toast = Toast.makeText(mContext, toastContent, Toast.LENGTH_LONG);
-            toast.show();
-
-//            NavUpdate.UpdateNavByUUID(userUUID);
         }
 
         @Override

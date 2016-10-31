@@ -15,34 +15,35 @@ public class User {
     private String username;
     private String email;
     private String created_date;
+    private boolean do_i_follow;
 
     /* [
+    "users": [
     {
-        "ID": 1,
-            "CreatedAt": "2016-10-25T18:33:16Z",
-            "UpdatedAt": "2016-10-25T18:33:16Z",
-            "DeletedAt": null,
-            "uuid": "a98b9a61-0a39-4cdc-ae32-f02e07c5f30d",
-            "username": "ian",
-            "email": "ian@getstream.io"
+      "uuid": "9cf34d34-a042-4231-babc-eee6ba67bd18",
+      "username": "ian",
+      "email": "ian@getstream.io",
+      "doifollow": false
     },
     */
     public User(JSONObject object) {
+        Log.i("user init", object.toString());
         try {
             this.uuid = object.getString("uuid");
             this.username = object.getString("username");
             Log.i("user-model-email", object.getString("email"));
             this.email = object.getString("email");
-            this.created_date = object.getString("created_date");
+            this.do_i_follow = object.getBoolean("doifollow");
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    public User(String uuid, String username, String email) {
+    public User(String uuid, String username, String email, boolean do_i_follow) {
         this.uuid = uuid;
         this.username = username;
         this.email = email;
+        this.do_i_follow = do_i_follow;
     }
 
     public String getUUID() {
@@ -54,8 +55,8 @@ public class User {
     public String getEmail() {
         return this.email;
     }
-    public String getCreatedDate() {
-        return this.created_date;
+    public boolean getDoIFollow() {
+        return this.do_i_follow;
     }
 
     public void setUUID(String val) {
@@ -67,8 +68,8 @@ public class User {
     public void setEmail(String val) {
         this.email = val;
     }
-    public void setCreatedDate(String val) {
-        this.created_date = val;
+    public void setDoIFollow(boolean val) {
+        this.do_i_follow = val;
     }
 
 }

@@ -1,9 +1,8 @@
 <resources>
-    <string name="pref_whichscreen"></string>
-    <string name="pref_authorid"></string>
-    <string name="pref_authorname"></string>
-    <string name="pref_authoremail"></string>
+    <string name="pref_authorid">streamUserUUID</string>
 
+    <!--<string name="backend_url">"http://go.sl.gtstrm.com:3000"</string>-->
+    <string name="backend_url">"http://10.0.2.2:3000"</string>
 
     <string name="app_name">Stream.io Example</string>
 
@@ -42,6 +41,7 @@
     <string name="menu_takephoto">Take Photo</string>
     <string name="menu_sign_out">Sign Out</string>
     <string name="user_follow">Follow</string>
+    <string name="user_unfollow">Unfollow</string>
     <string name="title_activity_register">Register</string>
 
     <!-- Strings related to register -->
@@ -50,7 +50,7 @@
     <!--<string name="action_sign_in">Sign in or register</string>-->
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_username">This username is too short (5 or more characters)</string>
+    <string name="error_invalid_username">This username is too short (3 or more characters)</string>
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
     <string name="title_activity_photo">PhotoActivity</string>

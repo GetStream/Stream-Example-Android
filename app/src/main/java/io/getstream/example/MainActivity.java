@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity
     private static final int CONST_ACTIVITY_REGISTER = 1;
     private static final int CONST_ACTIVITY_PHOTO = 2;
 
-
     private ListView feedList;
     private String title;
     private Fragment fragment;
@@ -71,6 +70,7 @@ public class MainActivity extends AppCompatActivity
         sharedprefsEditor = sharedPrefs.edit();
 
         mUserUUID = sharedPrefs.getString(getString(R.string.pref_authorid), "");
+        Log.i("main-onCreate", "mUserUUID from shared prefs: " + mUserUUID);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity
 
     private void setNavByRegistered() {
         mUserUUID = sharedPrefs.getString(getString(R.string.pref_authorid), "");
+        Log.i("setNav", "mUserUUID from shared prefs: " + mUserUUID);
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
