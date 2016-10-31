@@ -42,6 +42,7 @@ import io.getstream.example.clients.StreamBackendClient;
 import io.getstream.example.fragments.GlobalFeedFragment;
 import io.getstream.example.fragments.MyFeedFragment;
 import io.getstream.example.fragments.UsersFragment;
+import io.getstream.example.fragments.ProfileFragment;
 import io.getstream.example.models.FeedItem;
 
 import static io.getstream.example.utils.Gravatar.md5;
@@ -194,7 +195,14 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         switch (id) {
-            default:
+            case R.id.nav_take_photo:
+                Log.i("Main-onNavSelected", getString(R.string.menu_take_photo));
+                title = getString(R.string.menu_take_photo);
+                launchActivity("photo", this);
+                Log.i("main", "finished register activity");
+                break;
+
+//            default:
             case R.id.nav_global_feed:
                 // Handle the camera action
                 Log.i("Main-onNavSelected", getString(R.string.menu_global_feed));
@@ -217,19 +225,23 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_my_profile:
                 Log.i("Main-onNavSelected", getString(R.string.menu_my_profile));
                 title = getString(R.string.menu_my_profile);
+                fragment = new ProfileFragment(getApplicationContext());
+                break;
+
+            case R.id.nav_notification_feed:
+                Log.i("Main-onNavSelected", getString(R.string.menu_notification_feed));
+                title = getString(R.string.menu_notification_feed);
+                break;
+
+            case R.id.nav_aggregated_feed:
+                Log.i("Main-onNavSelected", getString(R.string.menu_aggregated_feed));
+                title = getString(R.string.menu_aggregated_feed);
                 break;
 
             case R.id.nav_register:
                 Log.i("Main-onNavSelected", getString(R.string.menu_register));
                 title = getString(R.string.menu_register);
                 launchActivity("register", this);
-                Log.i("main", "finished register activity");
-                break;
-
-            case R.id.nav_take_photo:
-                Log.i("Main-onNavSelected", getString(R.string.menu_takephoto));
-                title = getString(R.string.menu_takephoto);
-                launchActivity("photo", this);
                 Log.i("main", "finished register activity");
                 break;
 

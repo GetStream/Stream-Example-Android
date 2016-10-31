@@ -4,8 +4,8 @@
     <string name="pref_author_username">streamUsername</string>
     <string name="pref_author_gravatar">streamUserGravatar</string>
 
-    <string name="backend_url">"http://go.sl.gtstrm.com:3000"</string>
-    <!--<string name="backend_url">"http://10.0.2.2:3000"</string>-->
+    <!--<string name="backend_url">"http://go.sl.gtstrm.com:3000"</string>-->
+    <string name="backend_url">"http://10.0.2.2:3000"</string>
 
     <string name="app_name">Stream.io Example</string>
 
@@ -36,13 +36,16 @@
     <string name="example_preferences_item">Example Preferences Item</string>
     <string name="example_menu_item">Example Menu Item</string>
 
+    <string name="menu_take_photo">Take Photo</string>
     <string name="menu_global_feed">Global Feed</string>
     <string name="menu_my_feed">My Feed</string>
     <string name="menu_users">Users</string>
     <string name="menu_my_profile">My Profile</string>
+    <string name="menu_notification_feed">Notification Feed</string>
+    <string name="menu_aggregated_feed">Aggregated_Feed</string>
     <string name="menu_register">Register/Login</string>
-    <string name="menu_takephoto">Take Photo</string>
     <string name="menu_sign_out">Sign Out</string>
+
     <string name="user_follow">Follow</string>
     <string name="user_unfollow">Unfollow</string>
     <string name="title_activity_register">Register</string>
@@ -65,5 +68,8 @@
     <string name="photo_thumbnail_desc">image thumbnail</string>
     <string name="your_username_here">Your Username Here</string>
     <string name="your_email_address_com">your.email@address.com</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

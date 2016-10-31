@@ -2,6 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--<group android:checkableBehavior="single">-->
+    <item
+        android:id="@+id/nav_take_photo"
+        android:title="@string/menu_take_photo" />
         <item
             android:id="@+id/nav_global_feed"
             android:title="@string/menu_global_feed" />
@@ -9,14 +12,17 @@
             android:id="@+id/nav_my_feed"
             android:title="@string/menu_my_feed" />
         <item
-            android:id="@+id/nav_take_photo"
-            android:title="@string/menu_takephoto" />
-        <item
             android:id="@+id/nav_users"
             android:title="@string/menu_users" />
         <item
             android:id="@+id/nav_my_profile"
             android:title="@string/menu_my_profile" />
+        <item
+            android:id="@+id/nav_notification_feed"
+            android:title="@string/menu_notification_feed" />
+        <item
+            android:id="@+id/nav_aggregated_feed"
+            android:title="@string/menu_aggregated_feed" />
         <item
             android:id="@+id/nav_register"
             android:title="@string/menu_register" />
