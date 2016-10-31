@@ -36,6 +36,7 @@
         </activity>
         <activity
             android:name=".RegisterActivity"
+            android:windowSoftInputMode="stateHidden"
             android:parentActivityName="io.getstream.example.MainActivity"
             android:label="@string/title_activity_register" />
         <activity
