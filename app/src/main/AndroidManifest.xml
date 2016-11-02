@@ -25,7 +25,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -35,18 +35,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RegisterActivity"
+            android:name=".activities.RegisterActivity"
             android:windowSoftInputMode="stateHidden"
-            android:parentActivityName="io.getstream.example.MainActivity"
+            android:parentActivityName="io.getstream.example.activities.MainActivity"
             android:label="@string/title_activity_register" />
         <activity
-            android:name=".PhotoIntentActivity"
+            android:name=".activities.PhotoIntentActivity"
             android:label="@string/title_activity_photo"
-            android:parentActivityName="io.getstream.example.MainActivity"
+            android:parentActivityName="io.getstream.example.activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="io.getstream.example.MainActivity" />
+                android:value="io.getstream.example.activities.MainActivity" />
         </activity>
 
         <provider

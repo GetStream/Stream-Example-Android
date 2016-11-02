@@ -39,7 +39,7 @@
         </LinearLayout>
     </LinearLayout>
     <ListView
-        android:id="@+id/list_profile_feed"
+        android:id="@+id/list_mytimeline_feed"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

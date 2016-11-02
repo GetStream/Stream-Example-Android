@@ -14,21 +14,22 @@ public class FeedItem {
     private String created_date;
     private Boolean iLikePhoto;
     private Boolean iFollowAuthor;
+    private Boolean supressGravatar;
     private Integer photoLikes;
 
     /*
     {
-      "id": "cb18ab6b-4b97-4136-b5e8-b7433969da18",
-      "author_email": "josh@getstream.io",
-      "author_name": "josh",
-      "author_id": "03a1cfed-3590-4aa8-a592-f78bc71ccfbd",
-      "photo_url": "https://android-demo.s3.amazonaws.com/photos/d25855d1-59ef-43db-b6b6-35a8c01db543.png",
-      "photo_uuid": "cb18ab6b-4b97-4136-b5e8-b7433969da18",
+      "id": "64f3c633-dd3c-404d-ab81-34cf00e89917",
+      "author_email": "ian@getstream.io",
+      "author_name": "ian",
+      "author_id": "9cf34d34-a042-4231-babc-eee6ba67bd18",
+      "photo_url": "https://android-demo.s3.amazonaws.com/photos/d326223c-5a01-40a1-a419-dd68292be6c1.png",
+      "photo_uuid": "64f3c633-dd3c-404d-ab81-34cf00e89917",
       "doifollow": false,
       "likes": 0,
       "ilikethis": false,
-      "created_date": "2016-10-30T16:01:51.80732"
-    },
+      "created_date": "2016-11-01T11:06:50.5275"
+    }
     */
     public FeedItem(JSONObject object) {
         try {
@@ -42,6 +43,25 @@ public class FeedItem {
             this.iLikePhoto = object.getBoolean("ilikethis");
             this.photoLikes = object.getInt("likes");
             this.iFollowAuthor = object.getBoolean("doifollow");
+            this.supressGravatar = false;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public FeedItem(JSONObject object, Boolean supressGravatar) {
+        try {
+            this.id = object.getString("id");
+            this.author_name = object.getString("author_name");
+            this.author_email = object.getString("author_email");
+            this.author_id = object.getString("author_id");
+            this.photo_url = object.getString("photo_url");
+            this.photo_uuid = object.getString("photo_uuid");
+            this.created_date = object.getString("created_date");
+            this.iLikePhoto = object.getBoolean("ilikethis");
+            this.photoLikes = object.getInt("likes");
+            this.iFollowAuthor = object.getBoolean("doifollow");
+            this.supressGravatar = supressGravatar;
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -56,7 +76,8 @@ public class FeedItem {
             Integer photoLikes,
             Boolean iFollowAuthor,
             String photoUrl,
-            String photoUUID
+            String photoUUID,
+            Boolean suppressGravatar
     ) {
         this.author_id = author_id;
         this.author_name = author_name;
@@ -97,6 +118,9 @@ public class FeedItem {
     }
     public Boolean getIFollowAuthor() {
         return this.iFollowAuthor;
+    }
+    public Boolean getSupressGravatar() {
+        return this.supressGravatar;
     }
 
     public void setAuthorName(String val) {

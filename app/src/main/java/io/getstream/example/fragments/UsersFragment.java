@@ -71,7 +71,7 @@ public class UsersFragment extends Fragment {
 
         StreamBackendClient.get(
                 myContext,
-                "/users?uuid=" + myUUID,
+                "/users?myUUID=" + myUUID,
                 headers.toArray(new Header[headers.size()]),
                 null,
                 new JsonHttpResponseHandler() {

@@ -1,7 +1,6 @@
 package io.getstream.example.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -26,9 +25,7 @@ import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.message.BasicHeader;
-import io.getstream.example.MainActivity;
 import io.getstream.example.MyApplication;
-import io.getstream.example.PhotoIntentActivity;
 import io.getstream.example.R;
 import io.getstream.example.clients.StreamBackendClient;
 import io.getstream.example.models.User;
@@ -162,7 +159,7 @@ public class UserAdapter extends ArrayAdapter<User> {
 
             StreamBackendClient.get(
                     myContext,
-                    "/" + action + "/" + uuid + "?uuid=" + myUUID,
+                    "/" + action + "/" + uuid + "?myUUID=" + myUUID,
                     headers.toArray(new Header[headers.size()]),
                     null,
                     new JsonHttpResponseHandler() {

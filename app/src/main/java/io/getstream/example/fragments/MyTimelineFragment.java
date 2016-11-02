@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -24,28 +23,26 @@ import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.message.BasicHeader;
-
 import io.getstream.example.R;
 import io.getstream.example.adapters.FeedItemAdapter;
 import io.getstream.example.adapters.FeedsAdapter;
 import io.getstream.example.clients.StreamBackendClient;
 import io.getstream.example.models.FeedItem;
 
-public class GlobalFeedFragment extends Fragment {
+public class MyTimelineFragment extends Fragment {
     private Context myContext;
     private FeedsAdapter mFeedsAdapter;
     private String mUserUUID;
-    private SharedPreferences sharedPrefs;
 
     private List<FeedItem> feedList;
     public String toastString;
     private Toast toast;
 
-    public GlobalFeedFragment() {
+    public MyTimelineFragment() {
         // you don't want this one
     }
 
-    public GlobalFeedFragment(Context context) {
+    public MyTimelineFragment(Context context) {
         myContext = context;
     }
 
@@ -54,25 +51,27 @@ public class GlobalFeedFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         toast = new Toast(getActivity().getApplicationContext());
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(myContext);
+
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         mUserUUID = sharedPrefs.getString(getString(R.string.pref_authorid), "");
+        Log.i("myFeed-onCreate", "mUserUUID from shared prefs: " + mUserUUID);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mFeedsAdapter = new FeedsAdapter(getActivity(), feedList);
-        View rootView = inflater.inflate(R.layout.global_feed, container, false);
+        View rootView = inflater.inflate(R.layout.user_feed, container, false);
 
-        final ListView listView = (ListView) rootView.findViewById(R.id.list_globalfeed);
+        final ListView listView = (ListView) rootView.findViewById(R.id.list_myfeed);
 
         List<Header> headers = new ArrayList<Header>();
         headers.add(new BasicHeader("Accept", "application/json"));
 
-        Log.i("getGlobalFeed", "prep done to do get() call");
+        Log.i("getUserFeed", "prep done to do get() call");
 
         StreamBackendClient.get(
                 myContext,
-                "/feed/user/global?myUUID="+mUserUUID,
+                "/feed/timeline/" + mUserUUID,
                 headers.toArray(new Header[headers.size()]),
                 null,
                 new JsonHttpResponseHandler() {
@@ -87,11 +86,17 @@ public class GlobalFeedFragment extends Fragment {
 
                             for (int i = 0; i < data.length(); i++) {
                                 try {
-                                    Log.i("feeditem-json", data.getJSONObject(i).toString());
                                     feedAdapter.add(new FeedItem(data.getJSONObject(i)));
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+                            }
+
+                            if (data.length() == 0) {
+                                String toastContent = "You have no items in your feed, try following others!";
+                                Toast toast = Toast.makeText(getActivity(), toastContent, Toast.LENGTH_LONG);
+                                toast.show();
+
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -100,12 +105,12 @@ public class GlobalFeedFragment extends Fragment {
                     }
 
                     public void onFailure(int statusCode, Header[] headers, JSONArray response) {
-                        Log.i("getGlobalFeed", "onFailure");
+                        Log.i("getUserFeed", "onFailure");
                     }
                 });
 
 //        listView.setAdapter(mFeedsAdapter);
         return rootView;
     }
-}
 
+}

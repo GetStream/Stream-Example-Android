@@ -1,4 +1,4 @@
-package io.getstream.example;
+package io.getstream.example.activities;
 
 import android.app.PendingIntent;
 import android.content.Context;
@@ -25,27 +25,15 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.message.BasicHeader;
-import io.getstream.example.adapters.FeedItemAdapter;
-import io.getstream.example.clients.StreamBackendClient;
+import io.getstream.example.R;
 import io.getstream.example.fragments.GlobalFeedFragment;
-import io.getstream.example.fragments.MyFeedFragment;
+import io.getstream.example.fragments.MyNotificationsFragment;
+import io.getstream.example.fragments.MyTimelineFragment;
 import io.getstream.example.fragments.UsersFragment;
 import io.getstream.example.fragments.ProfileFragment;
-import io.getstream.example.models.FeedItem;
 
-import static io.getstream.example.utils.Gravatar.md5;
 import static io.getstream.example.utils.Gravatar.pickRandomAnimalAvatar;
 
 public class MainActivity extends AppCompatActivity
@@ -138,6 +126,9 @@ public class MainActivity extends AppCompatActivity
             navMenu.findItem(R.id.nav_take_photo).setVisible(false);
             navMenu.findItem(R.id.nav_my_feed).setVisible(false);
             navMenu.findItem(R.id.nav_my_profile).setVisible(false);
+            navMenu.findItem(R.id.nav_users).setVisible(false);
+            navMenu.findItem(R.id.nav_notification_feed).setVisible(false);
+            navMenu.findItem(R.id.nav_aggregated_feed).setVisible(false);
             navMenu.findItem(R.id.nav_register).setVisible(true);
             navMenu.findItem(R.id.nav_sign_out).setVisible(false);
             i.setImageResource(android.R.drawable.sym_def_app_icon);
@@ -145,6 +136,9 @@ public class MainActivity extends AppCompatActivity
             navMenu.findItem(R.id.nav_take_photo).setVisible(true);
             navMenu.findItem(R.id.nav_my_feed).setVisible(true);
             navMenu.findItem(R.id.nav_my_profile).setVisible(true);
+            navMenu.findItem(R.id.nav_users).setVisible(true);
+            navMenu.findItem(R.id.nav_notification_feed).setVisible(true);
+            navMenu.findItem(R.id.nav_aggregated_feed).setVisible(true);
             navMenu.findItem(R.id.nav_register).setVisible(false);
             navMenu.findItem(R.id.nav_sign_out).setVisible(true);
             if (mGravatar.length() > 0) {
@@ -211,9 +205,9 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.nav_my_feed:
-                Log.i("Main-onNavSelected", getString(R.string.menu_my_feed));
-                title = getString(R.string.menu_my_feed);
-                fragment = new MyFeedFragment(getApplicationContext());
+                Log.i("Main-onNavSelected", getString(R.string.menu_my_timeline));
+                title = getString(R.string.menu_my_timeline);
+                fragment = new MyTimelineFragment(getApplicationContext());
                 break;
 
             case R.id.nav_users:
@@ -231,6 +225,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_notification_feed:
                 Log.i("Main-onNavSelected", getString(R.string.menu_notification_feed));
                 title = getString(R.string.menu_notification_feed);
+                fragment = new MyNotificationsFragment(getApplicationContext());
                 break;
 
             case R.id.nav_aggregated_feed:
@@ -312,151 +307,151 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void whichScreen(Bundle savedInstanceState) {
-        String whichScreen;
-
-        // is userlist_user registered already?
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = preferences.edit();
-
-        // global feed
-        whichScreen = "";
-//        whichScreen = "register";
-//        whichScreen = "tabs";
-//        whichScreen = "feed_item";
-//        whichScreen = "user_profile";
-
-//        String authorID = sharedPrefs.getString(getString(R.string.pref_authorid), "");
-//        String authorEmail = sharedPrefs.getString(getString(R.string.pref_authoremail), "");
-//        String authorUsername = sharedPrefs.getString(getString(R.string.pref_authorname), "");
-
-        if (whichScreen == "register") {
-            setContentView(R.layout.register);
-        } else if (whichScreen == "activity_listusers") {
-            setContentView(R.layout.activity_listusers);
-        } else if (whichScreen == "feed_item") {
-            getSupportActionBar().setTitle("one feed item");
-            setContentView(R.layout.feed_item);
-        } else if (whichScreen == "user_profile") {
-            getSupportActionBar().setTitle(getString(R.string.menu_my_profile));
-            setContentView(R.layout.activity_user);
-            oldGetProfileFeed();
-
-            String hash = md5("ian.douglas@iandouglas.com");
-            String gravatarUrl = "http://www.gravatar.com/avatar/" + hash + "?s=204&d=404";
-            Log.i("gravatar url", gravatarUrl);
-            Picasso.with(MainActivity.this)
-                    .load(gravatarUrl)
-                    .placeholder(pickRandomAnimalAvatar())
-                    .into((ImageView) this.findViewById(R.id.profile_profile_image));
-            TextView pName = (TextView) this.findViewById(R.id.profile_author_name);
-            pName.setText("iandouglas736");
-
-        } else if (whichScreen == "" || whichScreen == "global") {
-            // if so, show the feeds
-            getSupportActionBar().setTitle(getString(R.string.menu_global_feed));
-            setContentView(R.layout.activity_loadfeed);
-//            getSupportFragmentManager()
-//                    .beginTransaction()
-//                    .add(R.id.container, new GlobalFeedFragment(this))
-//                    .commit();
-            oldGetGlobalFeed();
-        } else {
-            getSupportActionBar().setTitle(getString(R.string.menu_global_feed));
-            Log.i("MainActivity", "else");
-            setContentView(R.layout.activity_loadfeed);
-            oldGetGlobalFeed();
-        }
-    }
-
-    private void oldGetGlobalFeed() {
-
-        List<Header> headers = new ArrayList<Header>();
-        headers.add(new BasicHeader("Accept", "application/json"));
-
-        Log.i("getGlobalFeed", "prep done to do get() call");
-
-        StreamBackendClient.get(
-                this,
-                "/feed/global?uuid=" + mUserUUID,
-                headers.toArray(new Header[headers.size()]),
-                null,
-                new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                        JSONObject j;
-                        ArrayList<FeedItem> feedArray = new ArrayList<FeedItem>();
-                        FeedItemAdapter feedAdapter = new FeedItemAdapter(MainActivity.this, feedArray);
-
-                        try {
-                            JSONArray data = response.getJSONObject("feed").getJSONArray("results");
-
-                            for (int i = 0; i < data.length(); i++) {
-                                try {
-                                    feedAdapter.add(new FeedItem(data.getJSONObject(i)));
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        feedList = (ListView) findViewById(R.id.list_globalfeed);
-                        feedList.setAdapter(feedAdapter);
-                    }
-
-                    public void onFailure(int statusCode, Header[] headers, JSONArray response) {
-                        Log.i("getGlobalFeed", "onFailure");
-                    }
-                });
-    }
-
-    private void oldGetProfileFeed() {
-
-        List<Header> headers = new ArrayList<Header>();
-        headers.add(new BasicHeader("Accept", "application/json"));
-
-        Log.i("getGlobalFeed", "prep done to do get() call");
-
-        StreamBackendClient.get(
-                this,
-                "/feed/global?uuid=" + mUserUUID,
-                headers.toArray(new Header[headers.size()]),
-                null,
-                new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                        Log.i("onSuccess", "!");
-                        JSONObject j;
-                        ArrayList<FeedItem> feedArray = new ArrayList<FeedItem>();
-                        FeedItemAdapter feedAdapter = new FeedItemAdapter(MainActivity.this, feedArray);
-
-                        try {
-                            JSONArray data = response.getJSONObject("feed").getJSONArray("results");
-
-                            for (int i = 0; i < data.length(); i++) {
-                                try {
-                                    FeedItem item = new FeedItem(data.getJSONObject(i));
-                                    item.setAuthorEmail("");
-                                    item.setAuthorName("");
-                                    item.setCreatedDate("");
-                                    feedAdapter.add(item);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        feedList = (ListView) findViewById(R.id.list_profile_feed);
-                        feedList.setAdapter(feedAdapter);
-                    }
-
-                    public void onFailure(int statusCode, Header[] headers, JSONArray response) {
-                        Log.i("getGlobalFeed", "onFailure");
-                    }
-                });
-    }
+//    private void whichScreen(Bundle savedInstanceState) {
+//        String whichScreen;
+//
+//        // is userlist_user registered already?
+//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+//        SharedPreferences.Editor editor = preferences.edit();
+//
+//        // global feed
+//        whichScreen = "";
+////        whichScreen = "register";
+////        whichScreen = "tabs";
+////        whichScreen = "feed_item";
+////        whichScreen = "user_profile";
+//
+////        String authorID = sharedPrefs.getString(getString(R.string.pref_authorid), "");
+////        String authorEmail = sharedPrefs.getString(getString(R.string.pref_authoremail), "");
+////        String authorUsername = sharedPrefs.getString(getString(R.string.pref_authorname), "");
+//
+//        if (whichScreen == "register") {
+//            setContentView(R.layout.register);
+//        } else if (whichScreen == "activity_listusers") {
+//            setContentView(R.layout.activity_listusers);
+//        } else if (whichScreen == "feed_item") {
+//            getSupportActionBar().setTitle("one feed item");
+//            setContentView(R.layout.feed_item);
+//        } else if (whichScreen == "user_profile") {
+//            getSupportActionBar().setTitle(getString(R.string.menu_my_profile));
+//            setContentView(R.layout.activity_user);
+//            oldGetProfileFeed();
+//
+//            String hash = md5("ian.douglas@iandouglas.com");
+//            String gravatarUrl = "http://www.gravatar.com/avatar/" + hash + "?s=204&d=404";
+//            Log.i("gravatar url", gravatarUrl);
+//            Picasso.with(MainActivity.this)
+//                    .load(gravatarUrl)
+//                    .placeholder(pickRandomAnimalAvatar())
+//                    .into((ImageView) this.findViewById(R.id.profile_profile_image));
+//            TextView pName = (TextView) this.findViewById(R.id.profile_author_name);
+//            pName.setText("iandouglas736");
+//
+//        } else if (whichScreen == "" || whichScreen == "global") {
+//            // if so, show the feeds
+//            getSupportActionBar().setTitle(getString(R.string.menu_global_feed));
+//            setContentView(R.layout.activity_loadfeed);
+////            getSupportFragmentManager()
+////                    .beginTransaction()
+////                    .add(R.id.container, new GlobalFeedFragment(this))
+////                    .commit();
+//            oldGetGlobalFeed();
+//        } else {
+//            getSupportActionBar().setTitle(getString(R.string.menu_global_feed));
+//            Log.i("MainActivity", "else");
+//            setContentView(R.layout.activity_loadfeed);
+//            oldGetGlobalFeed();
+//        }
+//    }
+//
+//    private void oldGetGlobalFeed() {
+//
+//        List<Header> headers = new ArrayList<Header>();
+//        headers.add(new BasicHeader("Accept", "application/json"));
+//
+//        Log.i("getGlobalFeed", "prep done to do get() call");
+//
+//        StreamBackendClient.get(
+//                this,
+//                "/feed/global?uuid=" + mUserUUID,
+//                headers.toArray(new Header[headers.size()]),
+//                null,
+//                new JsonHttpResponseHandler() {
+//                    @Override
+//                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+//                        JSONObject j;
+//                        ArrayList<FeedItem> feedArray = new ArrayList<FeedItem>();
+//                        FeedItemAdapter feedAdapter = new FeedItemAdapter(MainActivity.this, feedArray);
+//
+//                        try {
+//                            JSONArray data = response.getJSONObject("feed").getJSONArray("results");
+//
+//                            for (int i = 0; i < data.length(); i++) {
+//                                try {
+//                                    feedAdapter.add(new FeedItem(data.getJSONObject(i)));
+//                                } catch (JSONException e) {
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//                        feedList = (ListView) findViewById(R.id.list_globalfeed);
+//                        feedList.setAdapter(feedAdapter);
+//                    }
+//
+//                    public void onFailure(int statusCode, Header[] headers, JSONArray response) {
+//                        Log.i("getGlobalFeed", "onFailure");
+//                    }
+//                });
+//    }
+//
+//    private void oldGetProfileFeed() {
+//
+//        List<Header> headers = new ArrayList<Header>();
+//        headers.add(new BasicHeader("Accept", "application/json"));
+//
+//        Log.i("getGlobalFeed", "prep done to do get() call");
+//
+//        StreamBackendClient.get(
+//                this,
+//                "/feed/global?uuid=" + mUserUUID,
+//                headers.toArray(new Header[headers.size()]),
+//                null,
+//                new JsonHttpResponseHandler() {
+//                    @Override
+//                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+//                        Log.i("onSuccess", "!");
+//                        JSONObject j;
+//                        ArrayList<FeedItem> feedArray = new ArrayList<FeedItem>();
+//                        FeedItemAdapter feedAdapter = new FeedItemAdapter(MainActivity.this, feedArray);
+//
+//                        try {
+//                            JSONArray data = response.getJSONObject("feed").getJSONArray("results");
+//
+//                            for (int i = 0; i < data.length(); i++) {
+//                                try {
+//                                    FeedItem item = new FeedItem(data.getJSONObject(i));
+//                                    item.setAuthorEmail("");
+//                                    item.setAuthorName("");
+//                                    item.setCreatedDate("");
+//                                    feedAdapter.add(item);
+//                                } catch (JSONException e) {
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//                        feedList = (ListView) findViewById(R.id.list_profile_feed);
+//                        feedList.setAdapter(feedAdapter);
+//                    }
+//
+//                    public void onFailure(int statusCode, Header[] headers, JSONArray response) {
+//                        Log.i("getGlobalFeed", "onFailure");
+//                    }
+//                });
+//    }
 }

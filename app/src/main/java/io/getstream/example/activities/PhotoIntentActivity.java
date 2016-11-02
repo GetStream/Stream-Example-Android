@@ -1,4 +1,4 @@
-package io.getstream.example;
+package io.getstream.example.activities;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,6 +36,8 @@ import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.message.BasicHeader;
+import io.getstream.example.MyApplication;
+import io.getstream.example.R;
 import io.getstream.example.clients.StreamBackendClient;
 import io.getstream.example.factories.AlbumStorageDirFactory;
 import io.getstream.example.factories.BaseAlbumDirFactory;

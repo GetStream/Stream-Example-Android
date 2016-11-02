@@ -1,4 +1,4 @@
-package io.getstream.example;
+package io.getstream.example.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -45,7 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.client.HttpResponseException;
+import io.getstream.example.R;
 import io.getstream.example.clients.StreamBackendClient;
 
 import static android.Manifest.permission.READ_CONTACTS;

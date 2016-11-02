@@ -1,10 +1,10 @@
 package io.getstream.example.fragments;
 
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,25 +24,26 @@ import java.util.List;
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.message.BasicHeader;
 import io.getstream.example.R;
-import io.getstream.example.adapters.FeedItemAdapter;
-import io.getstream.example.adapters.FeedsAdapter;
+import io.getstream.example.adapters.NotificationFeedAdapter;
+import io.getstream.example.adapters.NotificationFeedItemAdapter;
 import io.getstream.example.clients.StreamBackendClient;
-import io.getstream.example.models.FeedItem;
+import io.getstream.example.models.NotificationFeedItem;
 
-public class MyFeedFragment extends Fragment {
+public class MyNotificationsFragment extends Fragment {
+
     private Context myContext;
-    private FeedsAdapter mFeedsAdapter;
+    private NotificationFeedAdapter mFeedAdapter;
     private String mUserUUID;
 
-    private List<FeedItem> feedList;
+    private List<NotificationFeedItem> feedList;
     public String toastString;
     private Toast toast;
 
-    public MyFeedFragment() {
+    public MyNotificationsFragment() {
         // you don't want this one
     }
 
-    public MyFeedFragment(Context context) {
+    public MyNotificationsFragment(Context context) {
         myContext = context;
     }
 
@@ -54,46 +55,45 @@ public class MyFeedFragment extends Fragment {
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         mUserUUID = sharedPrefs.getString(getString(R.string.pref_authorid), "");
-        Log.i("myFeed-onCreate", "mUserUUID from shared prefs: " + mUserUUID);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mFeedsAdapter = new FeedsAdapter(getActivity(), feedList);
-        View rootView = inflater.inflate(R.layout.user_feed, container, false);
+        mFeedAdapter = new NotificationFeedAdapter(getActivity(), feedList);
+        View rootView = inflater.inflate(R.layout.fragment_notifications, container, false);
 
-        final ListView listView = (ListView) rootView.findViewById(R.id.list_myfeed);
+        final ListView listView = (ListView) rootView.findViewById(R.id.list_notifications_feed);
 
         List<Header> headers = new ArrayList<Header>();
         headers.add(new BasicHeader("Accept", "application/json"));
 
-        Log.i("getUserFeed", "prep done to do get() call");
+        Log.i("getNotificationFeed", "prep done to do get() call");
 
         StreamBackendClient.get(
                 myContext,
-                "/feed/" + mUserUUID,
+                "/feed/notifications?myUUID=" + mUserUUID,
                 headers.toArray(new Header[headers.size()]),
                 null,
                 new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         JSONObject j;
-                        ArrayList<FeedItem> feedArray = new ArrayList<FeedItem>();
-                        FeedItemAdapter feedAdapter = new FeedItemAdapter(myContext, feedArray);
+                        ArrayList<NotificationFeedItem> feedArray = new ArrayList<NotificationFeedItem>();
+                        NotificationFeedItemAdapter feedAdapter = new NotificationFeedItemAdapter(myContext, feedArray);
 
                         try {
                             JSONArray data = response.getJSONArray("feed");
 
                             for (int i = 0; i < data.length(); i++) {
                                 try {
-                                    feedAdapter.add(new FeedItem(data.getJSONObject(i)));
+                                    feedAdapter.add(new NotificationFeedItem(data.getJSONObject(i)));
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
                             }
 
                             if (data.length() == 0) {
-                                String toastContent = "You have no items in your feed, try following others!";
+                                String toastContent = "You have no items in your notification feed yet";
                                 Toast toast = Toast.makeText(getActivity(), toastContent, Toast.LENGTH_LONG);
                                 toast.show();
 
@@ -112,5 +112,4 @@ public class MyFeedFragment extends Fragment {
 //        listView.setAdapter(mFeedsAdapter);
         return rootView;
     }
-
 }

@@ -1,8 +1,6 @@
 package io.getstream.example.adapters;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,131 +26,103 @@ import cz.msebera.android.httpclient.message.BasicHeader;
 import io.getstream.example.MyApplication;
 import io.getstream.example.R;
 import io.getstream.example.clients.StreamBackendClient;
-import io.getstream.example.models.FeedItem;
+import io.getstream.example.models.NotificationFeedItem;
 
 import static io.getstream.example.utils.Gravatar.md5;
 import static io.getstream.example.utils.Gravatar.pickRandomAnimalAvatar;
 
 
-public class FeedItemAdapter extends ArrayAdapter<FeedItem> {
+public class NotificationFeedItemAdapter extends ArrayAdapter<NotificationFeedItem> {
     private Context myContext;
     private String myUUID = "" ;
-    private String authorUUID;
-    private SharedPreferences sharedPrefs;
     private Toast toast;
 
     private static class ViewHolder {
-        TextView author_name;
-        TextView created_date;
+        TextView notification_message;
         ImageView photoImage;
         ImageView profileImage;
-        TextView photoLikeCount;
-        Button btnLikePhoto;
-        Button btnFollowAuthor;
     }
 
-    public FeedItemAdapter(Context context, ArrayList<FeedItem> feedItems) {
-        super(context, R.layout.feed_item, feedItems);
+    public NotificationFeedItemAdapter(Context context, ArrayList<NotificationFeedItem> notificationFeedItems) {
+        super(context, R.layout.notification_feed_item, notificationFeedItems);
         myContext = context;
         toast = new Toast(MyApplication.getAppContext());
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getAppContext());
-        myUUID = sharedPrefs.getString(myContext.getString(R.string.pref_authorid), "");
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        FeedItem feed_item = getItem(position);
+        NotificationFeedItem feed_item = getItem(position);
         ViewHolder viewHolder;
 
         if (convertView == null) {
             viewHolder = new ViewHolder();
 
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.feed_item, parent, false);
+            convertView = inflater.inflate(R.layout.notification_feed_item, parent, false);
 
-            viewHolder.author_name = (TextView) convertView.findViewById(R.id.feed_item_author_name);
-            viewHolder.created_date = (TextView) convertView.findViewById(R.id.feed_item_created_date);
+            viewHolder.notification_message = (TextView) convertView.findViewById(R.id.feed_item_notification_message);
             viewHolder.photoImage = (ImageView) convertView.findViewById(R.id.feed_item_photo_image);
             viewHolder.profileImage = (ImageView) convertView.findViewById(R.id.feed_item_profile_image);
-            viewHolder.photoLikeCount = (TextView) convertView.findViewById(R.id.feed_item_likes);
-            viewHolder.btnLikePhoto = (Button) convertView.findViewById(R.id.feeditem_like_button);
-            viewHolder.btnFollowAuthor = (Button) convertView.findViewById(R.id.feed_follow_button);
 
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.author_name.setText(feed_item.getAuthorName());
-        viewHolder.created_date.setText(feed_item.getCreatedDate());
-        viewHolder.photoLikeCount.setText(Integer.toString(feed_item.getPhotoLikes()) + " likes");
+        String gravatar_url ;
+        String notificationMessage ;
 
-        authorUUID = feed_item.getAuthorId();
+        String verb = feed_item.getVerb();
+        String photo_url = feed_item.getPhotoUrl();
+        String past_tense_verb = " liked your photo" ;
 
-        Boolean iFollowAuthor = feed_item.getIFollowAuthor();
-        Boolean iLikePhoto = feed_item.getILikePhoto();
-
-        if (myUUID.equals("")) {
-            // no stars lit up if you're not logged in
-            viewHolder.btnLikePhoto.setBackgroundResource(android.R.drawable.btn_star_big_off);
-        } else {
-            if (iLikePhoto) {
-                // turn star on since we like this already
-                viewHolder.btnLikePhoto.setBackgroundResource(android.R.drawable.btn_star_big_on);
-                // set click handler to unlike
-                viewHolder.btnLikePhoto.setOnClickListener(
-                        new LikeClickListener("unlike", feed_item.getPhotoUUID())
-                );
-            } else {
-                // turn star off since we don't like this yet
-                viewHolder.btnLikePhoto.setBackgroundResource(android.R.drawable.btn_star_big_off);
-                // set click handler to like
-                viewHolder.btnLikePhoto.setOnClickListener(
-                        new LikeClickListener("like", feed_item.getPhotoUUID())
-                );
-            }
+        if (verb.equals("follow")) {
+            past_tense_verb = " followed you" ;
         }
 
-        if (myUUID.equals("")) {
-            // no follow/unfollow buttons if you're not logged in
-            viewHolder.btnFollowAuthor.setVisibility(View.GONE);
-        } else {
-            if (authorUUID.equals(myUUID)) {
-                viewHolder.btnFollowAuthor.setVisibility(View.GONE);
-            } else {
-                Log.i("feeditem", "do i follow:" + iFollowAuthor.toString());
+        String hash = md5(feed_item.getFirstEmail());
+        gravatar_url = "http://www.gravatar.com/avatar/" + hash + "?s=204&d=404";
 
-                if (iFollowAuthor) {
-                    viewHolder.btnFollowAuthor.setText(R.string.user_unfollow);
-                    viewHolder.btnFollowAuthor.setOnClickListener(
-                            new FollowClickListener(R.string.user_unfollow, feed_item.getAuthorName(), feed_item.getAuthorId())
-                    );
-                } else {
-                    viewHolder.btnFollowAuthor.setText(R.string.user_follow);
-                    viewHolder.btnFollowAuthor.setOnClickListener(
-                            new FollowClickListener(R.string.user_follow, feed_item.getAuthorName(), feed_item.getAuthorId())
-                    );
-                }
+        Integer follower_count = feed_item.getUsernames().size();
+
+        notificationMessage = feed_item.getFirstUsername();
+        if (follower_count > 1) {
+            follower_count--;
+            notificationMessage = notificationMessage + " and " + follower_count.toString();
+            if (follower_count == 1) {
+                notificationMessage = notificationMessage + " other";
+            } else if (follower_count <= 3) {
+                notificationMessage = notificationMessage + " others";
+            } else {
+                notificationMessage = notificationMessage + "+ others";
             }
+        }
+        notificationMessage = notificationMessage + past_tense_verb ;
+
+        viewHolder.notification_message.setText(notificationMessage);
+
+        if (photo_url != null && !photo_url.equals("")) {
+            Picasso.with(myContext)
+                    .load(photo_url)
+                    .resize(64, 64).centerInside()
+                    .placeholder(R.drawable.no_image)
+                    .into(viewHolder.photoImage);
+        } else {
+            viewHolder.photoImage.setVisibility(View.GONE);
         }
 
         Picasso.with(myContext)
-                .load(feed_item.getPhotoUrl())
-                .placeholder(R.drawable.no_image)
-                .into(viewHolder.photoImage);
+                .load(gravatar_url)
+                .placeholder(R.drawable.artist_placeholder)
+                .into(viewHolder.profileImage);
 
-        if (!feed_item.getSupressGravatar()) {
-            String hash = md5(feed_item.getAuthorEmail());
-            String gravatarUrl = "http://www.gravatar.com/avatar/" + hash + "?s=204&d=404";
-            Log.i("gravatar url", gravatarUrl);
-            Picasso.with(myContext)
-                    .load(gravatarUrl)
-                    .placeholder(pickRandomAnimalAvatar())
-                    .into(viewHolder.profileImage);
-        } else {
-            viewHolder.profileImage.setVisibility(View.GONE);
-            viewHolder.author_name.setVisibility(View.GONE);
-        }
+        /*
+        mBox = new TextView(context);
+        mBox.setText(Html.fromHtml("<b>" + title + "</b>" +  "<br />" +
+                    "<small>" + description + "</small>" + "<br />" +
+                    "<small>" + DateAdded + "</small>"));
+         */
+
         return convertView;
     }
 

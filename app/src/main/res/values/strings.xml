@@ -38,11 +38,11 @@
 
     <string name="menu_take_photo">Take Photo</string>
     <string name="menu_global_feed">Global Feed</string>
-    <string name="menu_my_feed">My Feed</string>
+    <string name="menu_my_timeline">My Timeline</string>
     <string name="menu_users">Users</string>
     <string name="menu_my_profile">My Profile</string>
     <string name="menu_notification_feed">Notification Feed</string>
-    <string name="menu_aggregated_feed">Aggregated_Feed</string>
+    <string name="menu_aggregated_feed">Aggregated Feed</string>
     <string name="menu_register">Register/Login</string>
     <string name="menu_sign_out">Sign Out</string>
 

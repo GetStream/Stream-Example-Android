@@ -75,22 +75,24 @@ public class ProfileFragment extends Fragment {
 
     private void fetchProfileFeed(View rootView) {
         mFeedsAdapter = new FeedsAdapter(getActivity(), feedList);
-        final ListView listView = (ListView) rootView.findViewById(R.id.list_myfeed);
+
+        final ListView listView = (ListView) rootView.findViewById(R.id.list_myprofile_feed);
 
         List<Header> headers = new ArrayList<Header>();
         headers.add(new BasicHeader("Accept", "application/json"));
 
-        Log.i("getUserFeed", "prep done to do get() call");
+        Log.i("getGlobalFeed", "prep done to do get() call");
 
         StreamBackendClient.get(
                 myContext,
-                "/feed/" + mUserUUID + "?uuid=" + mUserUUID,
+                "/feed/user/" + mUserUUID + "?myUUID=" + mUserUUID,
                 headers.toArray(new Header[headers.size()]),
                 null,
                 new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         JSONObject j;
+
                         ArrayList<FeedItem> feedArray = new ArrayList<FeedItem>();
                         FeedItemAdapter feedAdapter = new FeedItemAdapter(myContext, feedArray);
 
@@ -99,17 +101,11 @@ public class ProfileFragment extends Fragment {
 
                             for (int i = 0; i < data.length(); i++) {
                                 try {
-                                    feedAdapter.add(new FeedItem(data.getJSONObject(i)));
+                                    Log.i("feeditem-json", data.getJSONObject(i).toString());
+                                    feedAdapter.add(new FeedItem(data.getJSONObject(i), true));
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-                            }
-
-                            if (data.length() == 0) {
-                                String toastContent = "You have no items in your feed, try following others!";
-                                Toast toast = Toast.makeText(getActivity(), toastContent, Toast.LENGTH_LONG);
-                                toast.show();
-
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -118,9 +114,10 @@ public class ProfileFragment extends Fragment {
                     }
 
                     public void onFailure(int statusCode, Header[] headers, JSONArray response) {
-                        Log.i("getUserFeed", "onFailure");
+                        Log.i("getGlobalFeed", "onFailure");
                     }
                 });
+
     }
     private void fetchProfile() {
         List<Header> headers = new ArrayList<Header>();
