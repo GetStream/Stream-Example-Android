@@ -59,7 +59,7 @@ public class MyNotificationsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mFeedAdapter = new NotificationFeedAdapter(getActivity(), feedList);
-        View rootView = inflater.inflate(R.layout.fragment_notifications, container, false);
+        View rootView = inflater.inflate(R.layout.notification_main_layout, container, false);
 
         final ListView listView = (ListView) rootView.findViewById(R.id.list_notifications_feed);
 

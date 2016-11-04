@@ -3,6 +3,7 @@ package io.getstream.example.adapters;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +46,7 @@ public class UserAdapter extends ArrayAdapter<User> {
     }
 
     public UserAdapter(Context context, List<User> users) {
-        super(context, R.layout.userlist_user, users);
+        super(context, R.layout.users_listview_useritem, users);
         this.myContext = context;
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         myUUID = sharedPrefs.getString(context.getString(R.string.pref_authorid), "");
@@ -60,7 +61,7 @@ public class UserAdapter extends ArrayAdapter<User> {
             viewHolder = new UserAdapter.ViewHolder();
 
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.userlist_user, parent, false);
+            convertView = inflater.inflate(R.layout.users_listview_useritem, parent, false);
 
             viewHolder.username = (TextView) convertView.findViewById(R.id.userlist_author_name);
             viewHolder.profileImage = (ImageView) convertView.findViewById(R.id.userlist_profile_image);

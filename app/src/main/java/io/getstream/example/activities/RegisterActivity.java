@@ -60,7 +60,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.register);
+        setContentView(R.layout.register_main_layout);
         mContext = getApplicationContext();
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);

@@ -188,7 +188,7 @@ public class PhotoIntentActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_photo);
+        setContentView(R.layout.photo_main_layout);
 
         mImageView = (ImageView) findViewById(R.id.thumbnail_image);
         mImageBitmap = null;

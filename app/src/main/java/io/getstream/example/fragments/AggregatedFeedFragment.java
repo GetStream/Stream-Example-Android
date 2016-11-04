@@ -59,7 +59,7 @@ public class AggregatedFeedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mFeedAdapter = new AggregatedFeedAdapter(getActivity(), feedList);
-        View rootView = inflater.inflate(R.layout.fragment_aggregated, container, false);
+        View rootView = inflater.inflate(R.layout.aggregated_main_layout, container, false);
 
         final ListView listView = (ListView) rootView.findViewById(R.id.list_aggregated_feed);
 

@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="io.getstream.example.PhotoActivityFragment"
-    tools:showIn="@layout/activity_photo">
+    tools:showIn="@layout/photo_main_layout">
 
 
 </RelativeLayout>

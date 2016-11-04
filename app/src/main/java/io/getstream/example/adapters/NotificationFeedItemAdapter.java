@@ -28,7 +28,6 @@ import io.getstream.example.clients.StreamBackendClient;
 import io.getstream.example.models.NotificationFeedItem;
 
 import static io.getstream.example.utils.Gravatar.md5;
-import static io.getstream.example.utils.Gravatar.pickRandomAnimalAvatar;
 
 
 public class NotificationFeedItemAdapter extends ArrayAdapter<NotificationFeedItem> {
@@ -43,7 +42,7 @@ public class NotificationFeedItemAdapter extends ArrayAdapter<NotificationFeedIt
     }
 
     public NotificationFeedItemAdapter(Context context, ArrayList<NotificationFeedItem> notificationFeedItems) {
-        super(context, R.layout.notification_feed_item, notificationFeedItems);
+        super(context, R.layout.notification_listview_feeditem, notificationFeedItems);
         myContext = context;
         toast = new Toast(MyApplication.getAppContext());
     }
@@ -57,7 +56,7 @@ public class NotificationFeedItemAdapter extends ArrayAdapter<NotificationFeedIt
             viewHolder = new ViewHolder();
 
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.notification_feed_item, parent, false);
+            convertView = inflater.inflate(R.layout.notification_listview_feeditem, parent, false);
 
             viewHolder.notification_message = (TextView) convertView.findViewById(R.id.feed_item_notification_message);
             viewHolder.photoImage = (ImageView) convertView.findViewById(R.id.feed_item_photo_image);

@@ -119,6 +119,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setNavByRegistered() {
+        Log.i("main-activity", "setting nav menu");
         TextView t;
         ImageView i;
 
@@ -244,7 +245,7 @@ public class MainActivity extends AppCompatActivity
 
             case R.id.nav_register:
                 title = getString(R.string.menu_register);
-                launchActivity("register", this);
+                launchActivity("register_main_layout", this);
                 break;
 
             case R.id.nav_sign_out:
@@ -273,7 +274,7 @@ public class MainActivity extends AppCompatActivity
         intent = null;
         int requestCode = 0;
 
-        if (activity.equals("register")) {
+        if (activity.equals("register_main_layout")) {
             requestCode = CONST_ACTIVITY_REGISTER;
             intent = new Intent(context, RegisterActivity.class);
         }

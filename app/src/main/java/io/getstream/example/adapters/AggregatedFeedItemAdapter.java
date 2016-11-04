@@ -35,7 +35,7 @@ public class AggregatedFeedItemAdapter extends ArrayAdapter<AggregatedFeedItem> 
     }
 
     public AggregatedFeedItemAdapter(Context context, ArrayList<AggregatedFeedItem> aggregatedFeedItems) {
-        super(context, R.layout.notification_feed_item, aggregatedFeedItems);
+        super(context, R.layout.notification_listview_feeditem, aggregatedFeedItems);
         myContext = context;
         toast = new Toast(MyApplication.getAppContext());
     }
@@ -52,7 +52,7 @@ public class AggregatedFeedItemAdapter extends ArrayAdapter<AggregatedFeedItem> 
             viewHolder = new ViewHolder();
 
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.aggregated_feed_item, parent, false);
+            convertView = inflater.inflate(R.layout.aggregated_listview_feeditem, parent, false);
 
             viewHolder.created_date = (TextView) convertView.findViewById(R.id.aggregated_date);
             viewHolder.notification_message = (TextView) convertView.findViewById(R.id.feed_item_aggregated_message);

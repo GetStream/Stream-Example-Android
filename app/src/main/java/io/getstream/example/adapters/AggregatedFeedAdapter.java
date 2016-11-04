@@ -32,7 +32,7 @@ public class AggregatedFeedAdapter extends ArrayAdapter<AggregatedFeedItem> {
 
         if (convertView == null) {
             LayoutInflater inflater = context.getLayoutInflater();
-            convertView = inflater.inflate(R.layout.activity_loadfeed, parent, false);
+            convertView = inflater.inflate(R.layout.aggregated_main_layout, parent, false);
 
             holder = new ViewHolder();
             convertView.setTag(holder);

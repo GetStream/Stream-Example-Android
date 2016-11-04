@@ -59,7 +59,7 @@ public class UsersFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mUserAdapter = new UserAdapter(getActivity(), userList);
-        View rootView = inflater.inflate(R.layout.activity_listusers, container, false);
+        View rootView = inflater.inflate(R.layout.users_main_layout, container, false);
 
         final ListView listView = (ListView) rootView.findViewById(R.id.list_users);
 

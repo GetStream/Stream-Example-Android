@@ -10,7 +10,6 @@ import android.widget.TextView;
 import java.util.List;
 
 import io.getstream.example.R;
-import io.getstream.example.models.FeedItem;
 import io.getstream.example.models.NotificationFeedItem;
 
 public class NotificationFeedAdapter extends ArrayAdapter<NotificationFeedItem> {
@@ -33,7 +32,7 @@ public class NotificationFeedAdapter extends ArrayAdapter<NotificationFeedItem> 
 
         if (convertView == null) {
             LayoutInflater inflater = context.getLayoutInflater();
-            convertView = inflater.inflate(R.layout.activity_loadfeed, parent, false);
+            convertView = inflater.inflate(R.layout.notification_main_layout, parent, false);
 
             holder = new ViewHolder();
 //            holder.feedID = (TextView) convertView.findViewById(R.id.feed_item_author_name);

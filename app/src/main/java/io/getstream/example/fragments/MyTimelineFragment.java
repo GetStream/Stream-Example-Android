@@ -58,7 +58,7 @@ public class MyTimelineFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mFeedsAdapter = new FeedsAdapter(getActivity(), feedList);
-        View rootView = inflater.inflate(R.layout.user_feed, container, false);
+        View rootView = inflater.inflate(R.layout.timeline_main_layout, container, false);
 
         final ListView listView = (ListView) rootView.findViewById(R.id.list_myfeed);
 

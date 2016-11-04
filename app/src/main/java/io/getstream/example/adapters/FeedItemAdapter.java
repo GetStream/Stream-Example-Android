@@ -51,7 +51,7 @@ public class FeedItemAdapter extends ArrayAdapter<FeedItem> {
     }
 
     public FeedItemAdapter(Context context, ArrayList<FeedItem> feedItems) {
-        super(context, R.layout.feed_item, feedItems);
+        super(context, R.layout.primary_feed_item, feedItems);
         myContext = context;
         toast = new Toast(MyApplication.getAppContext());
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getAppContext());
@@ -67,7 +67,7 @@ public class FeedItemAdapter extends ArrayAdapter<FeedItem> {
             viewHolder = new ViewHolder();
 
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.feed_item, parent, false);
+            convertView = inflater.inflate(R.layout.primary_feed_item, parent, false);
 
             viewHolder.author_name = (TextView) convertView.findViewById(R.id.feed_item_author_name);
             viewHolder.created_date = (TextView) convertView.findViewById(R.id.feed_item_created_date);
