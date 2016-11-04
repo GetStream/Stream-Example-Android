@@ -104,7 +104,6 @@ public class NotificationFeedItemAdapter extends ArrayAdapter<NotificationFeedIt
         if (photo_url != null && !photo_url.equals("")) {
             Picasso.with(myContext)
                     .load(photo_url)
-                    .resize(64, 64).centerInside()
                     .placeholder(R.drawable.no_image)
                     .into(viewHolder.photoImage);
         } else {
@@ -124,6 +123,13 @@ public class NotificationFeedItemAdapter extends ArrayAdapter<NotificationFeedIt
          */
 
         return convertView;
+    }
+
+    public int dpToPx(int dps) {
+        final float scale = myContext.getResources().getDisplayMetrics().density;
+        int pixels = (int) (dps * scale + 0.5f);
+
+        return pixels;
     }
 
     public class FollowClickListener implements View.OnClickListener {

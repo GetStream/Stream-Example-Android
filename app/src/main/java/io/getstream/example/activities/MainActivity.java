@@ -28,6 +28,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import io.getstream.example.R;
+import io.getstream.example.fragments.AggregatedFeedFragment;
 import io.getstream.example.fragments.GlobalFeedFragment;
 import io.getstream.example.fragments.MyNotificationsFragment;
 import io.getstream.example.fragments.MyTimelineFragment;
@@ -231,6 +232,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_aggregated_feed:
                 Log.i("Main-onNavSelected", getString(R.string.menu_aggregated_feed));
                 title = getString(R.string.menu_aggregated_feed);
+                fragment = new AggregatedFeedFragment(getApplicationContext());
                 break;
 
             case R.id.nav_register:

@@ -7,7 +7,7 @@
     <!--<string name="backend_url">"http://go.sl.gtstrm.com:3000"</string>-->
     <string name="backend_url">"http://10.0.2.2:3000"</string>
 
-    <string name="app_name">Stream.io Example</string>
+    <string name="app_name">GetStream.io Example</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
