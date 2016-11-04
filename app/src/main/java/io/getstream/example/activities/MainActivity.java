@@ -89,8 +89,21 @@ public class MainActivity extends AppCompatActivity
         RefreshGlobalFeed();
     }
 
+    // Some lifecycle callbacks so that the image can survive orientation change
     @Override
-    public void onRestart() {
+    protected void onSaveInstanceState(Bundle outState) {
+        // store something?
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        RefreshGlobalFeed();
+    }
+
+    @Override
+    public void onResume() {
         super.onRestart();
         RefreshGlobalFeed();
     }
@@ -100,9 +113,9 @@ public class MainActivity extends AppCompatActivity
         // relaunch the global feed activity
         getSupportActionBar().setTitle(getString(R.string.menu_global_feed));
         fragment = new GlobalFeedFragment(getApplicationContext());
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.main_container, fragment);
-        ft.commit();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.main_container, fragment);
+            ft.commit();
     }
 
     private void setNavByRegistered() {
