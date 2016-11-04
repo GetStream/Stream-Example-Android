@@ -5,11 +5,14 @@ android {
     buildToolsVersion "24.0.3"
     defaultConfig {
         applicationId "io.getstream.example"
-        minSdkVersion 19
+        minSdkVersion 20
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    defaultConfig {
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
@@ -29,6 +32,5 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.loopj.android:android-async-http:1.4.9'
     compile 'com.android.support:support-v4:25.0.0'
-//    compile 'com.google.android.gms:play-services:9.8.0'
     testCompile 'junit:junit:4.12'
 }

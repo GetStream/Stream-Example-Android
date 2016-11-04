@@ -22,7 +22,6 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -85,9 +84,6 @@ public class PhotoIntentActivity extends Activity {
         int targetW = mImageView.getWidth();
         int targetH = mImageView.getHeight();
 
-        Log.i("setPic", "w:" + Integer.toString(targetW));
-        Log.i("setPic", "h:" + Integer.toString(targetH));
-
 		/* Get the size of the image */
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
@@ -148,7 +144,6 @@ public class PhotoIntentActivity extends Activity {
     Button.OnClickListener mUploadPhoto = new Button.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Log.i("camera", "upload button clicked");
             uploadPhoto(v, myUUID);
             finish();
         }
@@ -172,10 +167,7 @@ public class PhotoIntentActivity extends Activity {
 
                         try {
                             String data = response.getString("status");
-                            Log.i("upload", "data: " + data);
                             if (data.equals("processing")) {
-                                Log.i("returnstatus", "true");
-
                                 toast = Toast.makeText(MyApplication.getAppContext(), "photo is uploading", Toast.LENGTH_LONG);
                                 toast.show();
                             }
@@ -185,7 +177,6 @@ public class PhotoIntentActivity extends Activity {
                     }
 
                     public void onFailure(int statusCode, Header[] headers, JSONArray response) {
-                        Log.i("photoupload", "onFailure");
                         // TODO should handle error conditions
                     }
                 });
@@ -227,9 +218,6 @@ public class PhotoIntentActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null && mCurrentPhotoPath != "") {
-            Log.i("cam-int-done", "intent data is null");
-            Log.i("cam-int-done", mCurrentPhotoPath);
-
             Intent mediaScanIntent = new Intent("android.intent.action.MEDIA_SCANNER_SCAN_FILE");
             File f = new File(mCurrentPhotoPath);
             Uri contentUri = Uri.fromFile(f);
@@ -238,22 +226,9 @@ public class PhotoIntentActivity extends Activity {
             setPic();
 
         } else if (requestCode == 1 && resultCode == RESULT_OK) {
-//            Bundle extras = data.getExtras();
-//            Bitmap imageBitmap = (Bitmap) extras.get("data");
-//            mImageView.setImageBitmap(imageBitmap);
-//            mImageView.setVisibility(View.VISIBLE);
-//            mBtnUpload.setVisibility(View.VISIBLE);
-
-            Log.i("photo-act-result", "file location: " + mCurrentPhotoPath);
-            Log.i("photo-act-result", "img view width:" + Integer.toString(mImageView.getWidth()));
-            Log.i("photo-act-result", "img view height:" + Integer.toString(mImageView.getHeight()));
-
             File image = new File(mCurrentPhotoPath);
             BitmapFactory.Options bmOptions = new BitmapFactory.Options();
             Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath(),bmOptions);
-
-            Log.i("photo-act-result", "img width:" + Integer.toString(bitmap.getWidth()));
-            Log.i("photo-act-result", "img height:" + Integer.toString(bitmap.getHeight()));
 
             bitmap = Bitmap.createScaledBitmap(bitmap, mImageView.getWidth(), mImageView.getHeight(), true);
             mImageView.setImageBitmap(bitmap);

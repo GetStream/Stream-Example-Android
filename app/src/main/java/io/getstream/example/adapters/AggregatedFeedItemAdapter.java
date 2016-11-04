@@ -1,17 +1,13 @@
 package io.getstream.example.adapters;
 
 import android.content.Context;
-import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -83,7 +79,6 @@ public class AggregatedFeedItemAdapter extends ArrayAdapter<AggregatedFeedItem> 
 
         String hash = md5(feed_item.getAuthorEmail());
         gravatar_url = "http://www.gravatar.com/avatar/" + hash + "?s=204&d=404";
-        Log.i("aggfeed", gravatar_url);
         Picasso.with(myContext)
                 .load(gravatar_url)
                 .placeholder(R.drawable.artist_placeholder)

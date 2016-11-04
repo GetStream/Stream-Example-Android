@@ -2,11 +2,9 @@ package io.getstream.example.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,7 +57,6 @@ public class ProfileFragment extends Fragment {
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         mUserUUID = sharedPrefs.getString(getString(R.string.pref_authorid), "");
-        Log.i("getProfile-onCreate", "mUserUUID from shared prefs: " + mUserUUID);
     }
 
     @Override
@@ -81,8 +78,6 @@ public class ProfileFragment extends Fragment {
         List<Header> headers = new ArrayList<Header>();
         headers.add(new BasicHeader("Accept", "application/json"));
 
-        Log.i("getGlobalFeed", "prep done to do get() call");
-
         StreamBackendClient.get(
                 myContext,
                 "/feed/user/" + mUserUUID + "?myUUID=" + mUserUUID,
@@ -101,7 +96,6 @@ public class ProfileFragment extends Fragment {
 
                             for (int i = 0; i < data.length(); i++) {
                                 try {
-                                    Log.i("feeditem-json", data.getJSONObject(i).toString());
                                     feedAdapter.add(new FeedItem(data.getJSONObject(i), true));
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -114,7 +108,7 @@ public class ProfileFragment extends Fragment {
                     }
 
                     public void onFailure(int statusCode, Header[] headers, JSONArray response) {
-                        Log.i("getGlobalFeed", "onFailure");
+                        // TODO handle failure here
                     }
                 });
 
@@ -122,7 +116,6 @@ public class ProfileFragment extends Fragment {
     private void fetchProfile() {
         List<Header> headers = new ArrayList<Header>();
         headers.add(new BasicHeader("Accept", "application/json"));
-        Log.i("getProfile", "prep done to do get() call");
         StreamBackendClient.get(
                 myContext,
                 "/profilestats/" + mUserUUID,
@@ -151,7 +144,7 @@ public class ProfileFragment extends Fragment {
                             ImageView i = (ImageView) getActivity().findViewById(R.id.profile_avatar);
                             String hash = md5(email);
                             String gravatarUrl = "http://www.gravatar.com/avatar/" + hash + "?s=204&d=404";
-                            Log.i("gravatar url", gravatarUrl);
+
                             Picasso.with(myContext)
                                     .load(gravatarUrl)
                                     .placeholder(pickRandomAnimalAvatar())
@@ -163,7 +156,7 @@ public class ProfileFragment extends Fragment {
                     }
 
                     public void onFailure(int statusCode, Header[] headers, JSONArray response) {
-                        Log.i("getProfile", "onFailure");
+                        // TODO handle failure here
                     }
                 });
     }

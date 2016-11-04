@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +53,6 @@ public class MyTimelineFragment extends Fragment {
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         mUserUUID = sharedPrefs.getString(getString(R.string.pref_authorid), "");
-        Log.i("myFeed-onCreate", "mUserUUID from shared prefs: " + mUserUUID);
     }
 
     @Override
@@ -66,8 +64,6 @@ public class MyTimelineFragment extends Fragment {
 
         List<Header> headers = new ArrayList<Header>();
         headers.add(new BasicHeader("Accept", "application/json"));
-
-        Log.i("getUserFeed", "prep done to do get() call");
 
         StreamBackendClient.get(
                 myContext,
@@ -105,12 +101,11 @@ public class MyTimelineFragment extends Fragment {
                     }
 
                     public void onFailure(int statusCode, Header[] headers, JSONArray response) {
-                        Log.i("getUserFeed", "onFailure");
+                        // TODO handle failure here
                     }
                 });
 
 //        listView.setAdapter(mFeedsAdapter);
         return rootView;
     }
-
 }

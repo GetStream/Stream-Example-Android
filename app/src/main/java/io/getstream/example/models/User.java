@@ -1,13 +1,8 @@
 package io.getstream.example.models;
 
-import android.util.Log;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created by id on 10/25/16.
- */
 
 public class User {
 
@@ -27,11 +22,9 @@ public class User {
     },
     */
     public User(JSONObject object) {
-        Log.i("user init", object.toString());
         try {
             this.uuid = object.getString("uuid");
             this.username = object.getString("username");
-            Log.i("user-model-email", object.getString("email"));
             this.email = object.getString("email");
             this.do_i_follow = object.getBoolean("doifollow");
         } catch (JSONException e) {
@@ -59,17 +52,16 @@ public class User {
         return this.do_i_follow;
     }
 
-    public void setUUID(String val) {
-        this.uuid = val;
-    }
-    public void setUsername(String val) {
-        this.username = val;
-    }
-    public void setEmail(String val) {
-        this.email = val;
-    }
-    public void setDoIFollow(boolean val) {
-        this.do_i_follow = val;
-    }
-
+//    public void setUUID(String val) {
+//        this.uuid = val;
+//    }
+//    public void setUsername(String val) {
+//        this.username = val;
+//    }
+//    public void setEmail(String val) {
+//        this.email = val;
+//    }
+//    public void setDoIFollow(boolean val) {
+//        this.do_i_follow = val;
+//    }
 }

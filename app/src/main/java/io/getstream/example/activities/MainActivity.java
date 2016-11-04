@@ -11,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -68,7 +67,6 @@ public class MainActivity extends AppCompatActivity
         sharedprefsEditor = sharedPrefs.edit();
 
         mUserUUID = sharedPrefs.getString(getString(R.string.pref_authorid), "");
-        Log.i("main-onCreate", "mUserUUID from shared prefs: " + mUserUUID);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -106,11 +104,6 @@ public class MainActivity extends AppCompatActivity
         mUsername = sharedPrefs.getString(getString(R.string.pref_author_username), getString(R.string.your_username_here));
         mEmail = sharedPrefs.getString(getString(R.string.pref_author_email), getString(R.string.your_email_address_com));
         mGravatar = sharedPrefs.getString(getString(R.string.pref_author_gravatar), "");
-
-        Log.i("main-nav", mUserUUID);
-        Log.i("main-nav", mUsername);
-        Log.i("main-nav", mEmail);
-        Log.i("main-nav", mGravatar);
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -165,7 +158,6 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
-        Log.i("main", "************* nav create");
         return true;
     }
 
@@ -191,59 +183,48 @@ public class MainActivity extends AppCompatActivity
 
         switch (id) {
             case R.id.nav_take_photo:
-                Log.i("Main-onNavSelected", getString(R.string.menu_take_photo));
                 title = getString(R.string.menu_take_photo);
                 launchActivity("photo", this);
-                Log.i("main", "finished register activity");
                 break;
 
 //            default:
             case R.id.nav_global_feed:
                 // Handle the camera action
-                Log.i("Main-onNavSelected", getString(R.string.menu_global_feed));
                 title = getString(R.string.menu_global_feed);
                 fragment = new GlobalFeedFragment(getApplicationContext());
                 break;
 
             case R.id.nav_my_feed:
-                Log.i("Main-onNavSelected", getString(R.string.menu_my_timeline));
                 title = getString(R.string.menu_my_timeline);
                 fragment = new MyTimelineFragment(getApplicationContext());
                 break;
 
             case R.id.nav_users:
-                Log.i("Main-onNavSelected", getString(R.string.menu_users));
                 title = getString(R.string.menu_users);
                 fragment = new UsersFragment(getApplicationContext());
                 break;
 
             case R.id.nav_my_profile:
-                Log.i("Main-onNavSelected", getString(R.string.menu_my_profile));
                 title = getString(R.string.menu_my_profile);
                 fragment = new ProfileFragment(getApplicationContext());
                 break;
 
             case R.id.nav_notification_feed:
-                Log.i("Main-onNavSelected", getString(R.string.menu_notification_feed));
                 title = getString(R.string.menu_notification_feed);
                 fragment = new MyNotificationsFragment(getApplicationContext());
                 break;
 
             case R.id.nav_aggregated_feed:
-                Log.i("Main-onNavSelected", getString(R.string.menu_aggregated_feed));
                 title = getString(R.string.menu_aggregated_feed);
                 fragment = new AggregatedFeedFragment(getApplicationContext());
                 break;
 
             case R.id.nav_register:
-                Log.i("Main-onNavSelected", getString(R.string.menu_register));
                 title = getString(R.string.menu_register);
                 launchActivity("register", this);
-                Log.i("main", "finished register activity");
                 break;
 
             case R.id.nav_sign_out:
-                Log.i("Main-onNavSelected", getString(R.string.menu_sign_out));
                 sharedprefsEditor.putString(getString(R.string.pref_authorid), "");
                 sharedprefsEditor.commit();
                 title = getString(R.string.menu_global_feed);
@@ -294,166 +275,27 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.i("main", "main activity is resuming");
-        Log.i("main-req", Integer.toString(requestCode));
-        Log.i("main-res", Integer.toString(resultCode));
+//        Log.i("main", "main activity is resuming");
+//        Log.i("main-req", Integer.toString(requestCode));
+//        Log.i("main-res", Integer.toString(resultCode));
 
         switch (requestCode) {
             case CONST_ACTIVITY_PHOTO:
-                Log.i("main", "returned from taking a photo");
+//                Log.i("main", "returned from taking a photo");
                 break;
             case CONST_ACTIVITY_REGISTER:
-                Log.i("main", "returned from registering");
+//                Log.i("main", "returned from registering");
                 setNavByRegistered();
                 break;
         }
-    }
 
-//    private void whichScreen(Bundle savedInstanceState) {
-//        String whichScreen;
-//
-//        // is userlist_user registered already?
-//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-//        SharedPreferences.Editor editor = preferences.edit();
-//
-//        // global feed
-//        whichScreen = "";
-////        whichScreen = "register";
-////        whichScreen = "tabs";
-////        whichScreen = "feed_item";
-////        whichScreen = "user_profile";
-//
-////        String authorID = sharedPrefs.getString(getString(R.string.pref_authorid), "");
-////        String authorEmail = sharedPrefs.getString(getString(R.string.pref_authoremail), "");
-////        String authorUsername = sharedPrefs.getString(getString(R.string.pref_authorname), "");
-//
-//        if (whichScreen == "register") {
-//            setContentView(R.layout.register);
-//        } else if (whichScreen == "activity_listusers") {
-//            setContentView(R.layout.activity_listusers);
-//        } else if (whichScreen == "feed_item") {
-//            getSupportActionBar().setTitle("one feed item");
-//            setContentView(R.layout.feed_item);
-//        } else if (whichScreen == "user_profile") {
-//            getSupportActionBar().setTitle(getString(R.string.menu_my_profile));
-//            setContentView(R.layout.activity_user);
-//            oldGetProfileFeed();
-//
-//            String hash = md5("ian.douglas@iandouglas.com");
-//            String gravatarUrl = "http://www.gravatar.com/avatar/" + hash + "?s=204&d=404";
-//            Log.i("gravatar url", gravatarUrl);
-//            Picasso.with(MainActivity.this)
-//                    .load(gravatarUrl)
-//                    .placeholder(pickRandomAnimalAvatar())
-//                    .into((ImageView) this.findViewById(R.id.profile_profile_image));
-//            TextView pName = (TextView) this.findViewById(R.id.profile_author_name);
-//            pName.setText("iandouglas736");
-//
-//        } else if (whichScreen == "" || whichScreen == "global") {
-//            // if so, show the feeds
-//            getSupportActionBar().setTitle(getString(R.string.menu_global_feed));
-//            setContentView(R.layout.activity_loadfeed);
-////            getSupportFragmentManager()
-////                    .beginTransaction()
-////                    .add(R.id.container, new GlobalFeedFragment(this))
-////                    .commit();
-//            oldGetGlobalFeed();
-//        } else {
-//            getSupportActionBar().setTitle(getString(R.string.menu_global_feed));
-//            Log.i("MainActivity", "else");
-//            setContentView(R.layout.activity_loadfeed);
-//            oldGetGlobalFeed();
-//        }
-//    }
-//
-//    private void oldGetGlobalFeed() {
-//
-//        List<Header> headers = new ArrayList<Header>();
-//        headers.add(new BasicHeader("Accept", "application/json"));
-//
-//        Log.i("getGlobalFeed", "prep done to do get() call");
-//
-//        StreamBackendClient.get(
-//                this,
-//                "/feed/global?uuid=" + mUserUUID,
-//                headers.toArray(new Header[headers.size()]),
-//                null,
-//                new JsonHttpResponseHandler() {
-//                    @Override
-//                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                        JSONObject j;
-//                        ArrayList<FeedItem> feedArray = new ArrayList<FeedItem>();
-//                        FeedItemAdapter feedAdapter = new FeedItemAdapter(MainActivity.this, feedArray);
-//
-//                        try {
-//                            JSONArray data = response.getJSONObject("feed").getJSONArray("results");
-//
-//                            for (int i = 0; i < data.length(); i++) {
-//                                try {
-//                                    feedAdapter.add(new FeedItem(data.getJSONObject(i)));
-//                                } catch (JSONException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//
-//                        feedList = (ListView) findViewById(R.id.list_globalfeed);
-//                        feedList.setAdapter(feedAdapter);
-//                    }
-//
-//                    public void onFailure(int statusCode, Header[] headers, JSONArray response) {
-//                        Log.i("getGlobalFeed", "onFailure");
-//                    }
-//                });
-//    }
-//
-//    private void oldGetProfileFeed() {
-//
-//        List<Header> headers = new ArrayList<Header>();
-//        headers.add(new BasicHeader("Accept", "application/json"));
-//
-//        Log.i("getGlobalFeed", "prep done to do get() call");
-//
-//        StreamBackendClient.get(
-//                this,
-//                "/feed/global?uuid=" + mUserUUID,
-//                headers.toArray(new Header[headers.size()]),
-//                null,
-//                new JsonHttpResponseHandler() {
-//                    @Override
-//                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                        Log.i("onSuccess", "!");
-//                        JSONObject j;
-//                        ArrayList<FeedItem> feedArray = new ArrayList<FeedItem>();
-//                        FeedItemAdapter feedAdapter = new FeedItemAdapter(MainActivity.this, feedArray);
-//
-//                        try {
-//                            JSONArray data = response.getJSONObject("feed").getJSONArray("results");
-//
-//                            for (int i = 0; i < data.length(); i++) {
-//                                try {
-//                                    FeedItem item = new FeedItem(data.getJSONObject(i));
-//                                    item.setAuthorEmail("");
-//                                    item.setAuthorName("");
-//                                    item.setCreatedDate("");
-//                                    feedAdapter.add(item);
-//                                } catch (JSONException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//
-//                        feedList = (ListView) findViewById(R.id.list_profile_feed);
-//                        feedList.setAdapter(feedAdapter);
-//                    }
-//
-//                    public void onFailure(int statusCode, Header[] headers, JSONArray response) {
-//                        Log.i("getGlobalFeed", "onFailure");
-//                    }
-//                });
-//    }
+        // refresh the global feed
+        title = getString(R.string.menu_global_feed);
+        fragment = new GlobalFeedFragment(getApplicationContext());
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.main_container, fragment);
+        ft.commit();
+        getSupportActionBar().setTitle(title);
+
+    }
 }

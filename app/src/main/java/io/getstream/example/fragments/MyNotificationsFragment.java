@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,8 +66,6 @@ public class MyNotificationsFragment extends Fragment {
         List<Header> headers = new ArrayList<Header>();
         headers.add(new BasicHeader("Accept", "application/json"));
 
-        Log.i("getNotificationFeed", "prep done to do get() call");
-
         StreamBackendClient.get(
                 myContext,
                 "/feed/notifications?myUUID=" + mUserUUID,
@@ -105,7 +102,7 @@ public class MyNotificationsFragment extends Fragment {
                     }
 
                     public void onFailure(int statusCode, Header[] headers, JSONArray response) {
-                        Log.i("getUserFeed", "onFailure");
+                        // TODO handle failures
                     }
                 });
 

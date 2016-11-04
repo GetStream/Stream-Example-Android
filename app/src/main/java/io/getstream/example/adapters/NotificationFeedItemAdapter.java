@@ -1,7 +1,6 @@
 package io.getstream.example.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -147,23 +146,19 @@ public class NotificationFeedItemAdapter extends ArrayAdapter<NotificationFeedIt
         public void onClick(View v) {
             Boolean success;
 
-            Log.i("follow-click", "onClick called");
-            Log.i("follow-click", Integer.toString(this.Action));
             Button followButton = (Button) v.findViewById(R.id.feed_follow_button);
 
             switch (this.Action) {
                 default:
-                    Log.i("followBtn.click", "no idea what you're doing with " + this.Username);
+                    // should never get here
                     break;
                 case R.string.user_follow:
-                    Log.i("followBtn.click", "following " + this.Username);
                     followUser(v, "follow", this.Username, this.UUID);
                     followButton.setText(MyApplication.getAppContext().getString(R.string.user_unfollow));
                     followButton.setOnClickListener(
                             new FollowClickListener(R.string.user_unfollow, this.Username, this.UUID));
                     break;
                 case R.string.user_unfollow:
-                    Log.i("followBtn.click", "unfollowing " + this.Username);
                     followUser(v, "unfollow", this.Username, this.UUID);
                     followButton.setText(MyApplication.getAppContext().getString(R.string.user_follow));
                     followButton.setOnClickListener(
@@ -190,10 +185,7 @@ public class NotificationFeedItemAdapter extends ArrayAdapter<NotificationFeedIt
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             try {
                                 String data = response.getString("status");
-                                Log.i("user " + finalAction, "data: " + data);
                                 if (data.equals("success")) {
-                                    Log.i("returnstatus", "true");
-
                                     String toastPrefix = "now following ";
                                     if (finalAction.equals("unfollow")) {
                                         toastPrefix = "no longer following ";
@@ -207,9 +199,7 @@ public class NotificationFeedItemAdapter extends ArrayAdapter<NotificationFeedIt
                         }
 
                         public void onFailure(int statusCode, Header[] headers, JSONArray response) {
-                            Log.i("getGlobalFeed", "onFailure");
                             // TODO should handle error conditions
-                            Log.i("follow", "failure");
                         }
                     });
         }
@@ -227,22 +217,18 @@ public class NotificationFeedItemAdapter extends ArrayAdapter<NotificationFeedIt
         public void onClick(View v) {
             Boolean success;
 
-            Log.i("like-click", "onClick called");
-            Log.i("like-click", this.Action);
             Button likeButton = (Button) v.findViewById(R.id.feeditem_like_button);
 
             switch (this.Action) {
                 default:
-                    Log.i("followBtn.click", "no idea what you're doing with " + this.UUID);
+                    // should never get here
                     break;
                 case "like":
-                    Log.i("followBtn.click", "liking " + this.UUID);
                     likePhoto(v, "like", this.UUID);
                     likeButton.setBackgroundResource(android.R.drawable.btn_star_big_on);
                     likeButton.setOnClickListener(new LikeClickListener("unlike", UUID));
                     break;
                 case "unlike":
-                    Log.i("followBtn.click", "unliking " + this.UUID);
                     likePhoto(v, "unlike", this.UUID);
                     likeButton.setBackgroundResource(android.R.drawable.btn_star_big_off);
                     likeButton.setOnClickListener(new LikeClickListener("like", UUID));
@@ -267,9 +253,7 @@ public class NotificationFeedItemAdapter extends ArrayAdapter<NotificationFeedIt
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             try {
                                 String data = response.getString("status");
-                                Log.i("user " + finalAction, "data: " + data);
                                 if (data.equals("success")) {
-                                    Log.i("returnstatus", "true");
                                     toast = Toast.makeText(MyApplication.getAppContext(), finalAction+"d", Toast.LENGTH_LONG);
                                     toast.show();
                                 }
@@ -279,9 +263,7 @@ public class NotificationFeedItemAdapter extends ArrayAdapter<NotificationFeedIt
                         }
 
                         public void onFailure(int statusCode, Header[] headers, JSONArray response) {
-                            Log.i("getGlobalFeed", "onFailure");
                             // TODO should handle error conditions
-                            Log.i("follow", "failure");
                         }
                     });
         }

@@ -3,7 +3,6 @@ package io.getstream.example.adapters;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,17 +71,14 @@ public class UserAdapter extends ArrayAdapter<User> {
             viewHolder = (UserAdapter.ViewHolder) convertView.getTag();
         }
 
-        Log.i("userlist_user object", user.getUsername());
         String isnull = "true";
         if (viewHolder.username != null) {
             isnull = "false";
         }
-        Log.i("is viewholder null", isnull);
         viewHolder.username.setText(user.getUsername());
 
         String hash = md5(user.getEmail());
         String gravatarUrl = "http://www.gravatar.com/avatar/" + hash + "?s=204&d=404";
-        Log.i("gravatar url", gravatarUrl);
         Picasso.with(myContext)
                 .load(gravatarUrl)
                 .placeholder(pickRandomAnimalAvatar())
@@ -92,7 +88,6 @@ public class UserAdapter extends ArrayAdapter<User> {
             // hide follow button completely
             viewHolder.followButton.setVisibility(View.GONE);
         } else {
-            Log.i("user doifollow", user.getDoIFollow() ? "true" : "false");
             if (user.getDoIFollow()) {
                 // set follow button text to 'unfollow' and set click handler appropriately
                 viewHolder.followButton.setText(R.string.user_unfollow);
@@ -124,23 +119,19 @@ public class UserAdapter extends ArrayAdapter<User> {
         public void onClick(View v) {
             Boolean success;
 
-            Log.i("follow-click", "onClick called");
-            Log.i("follow-click", Integer.toString(this.Action));
             Button followButton = (Button) v.findViewById(R.id.user_follow_button);
 
             switch (this.Action) {
                 default:
-                    Log.i("followBtn.click", "no idea what you're doing with " + this.Username);
+                    // should never get here
                     break;
                 case R.string.user_follow:
-                    Log.i("followBtn.click", "following " + this.Username);
                     followUser(v, "follow", this.Username, this.UUID);
                     followButton.setText(MyApplication.getAppContext().getString(R.string.user_unfollow));
                     followButton.setOnClickListener(
                             new FollowClickListener(R.string.user_unfollow, this.Username, this.UUID));
                     break;
                 case R.string.user_unfollow:
-                    Log.i("followBtn.click", "unfollowing " + this.Username);
                     followUser(v, "unfollow", this.Username, this.UUID);
                     followButton.setText(MyApplication.getAppContext().getString(R.string.user_follow));
                     followButton.setOnClickListener(
@@ -167,10 +158,7 @@ public class UserAdapter extends ArrayAdapter<User> {
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             try {
                                 String data = response.getString("status");
-                                Log.i("user " + finalAction, "data: " + data);
                                 if (data.equals("success")) {
-                                    Log.i("returnstatus", "true");
-
                                     String toastPrefix = "now following ";
                                     if (finalAction.equals("unfollow")) {
                                         toastPrefix = "no longer following ";
@@ -184,9 +172,7 @@ public class UserAdapter extends ArrayAdapter<User> {
                         }
 
                         public void onFailure(int statusCode, Header[] headers, JSONArray response) {
-                            Log.i("getGlobalFeed", "onFailure");
                             // TODO should handle error conditions
-                            Log.i("follow", "failure");
                         }
                     });
         }

@@ -1,7 +1,5 @@
 package io.getstream.example.models;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,7 +11,6 @@ public class AggregatedFeedItem {
     private ArrayList<String> photo_url_list;
     private String author_email;
     private String author_name;
-    private String author_uuid;
     private String created_date;
 
     /*
@@ -49,14 +46,11 @@ public class AggregatedFeedItem {
         try {
             this.author_email = object.getString("author_email");
             this.author_name = object.getString("author_name");
-            this.author_uuid = object.getString("author_id");
             this.created_date = object.getString("created_date").substring(0, 10);
 
             JSONArray photos = object.getJSONArray("photos");
             for (int i=0; i < photos.length(); i++) {
                 String photo_url = photos.getString(i);
-                Log.i("agg-feed-item", "photo_url:" + photo_url);
-
                 this.photo_url_list.add(photo_url);
             }
 
@@ -74,13 +68,7 @@ public class AggregatedFeedItem {
     public ArrayList<String> getPhotoURLs() {
         return this.photo_url_list;
     }
-    public String getPhotoURL(Integer position) {
-        return this.photo_url_list.get(position);
-    }
     public String getCreatedDate() {
         return this.created_date;
-    }
-    public String getAuthorUUID() {
-        return this.author_uuid;
     }
 }

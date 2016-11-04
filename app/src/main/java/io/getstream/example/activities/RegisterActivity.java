@@ -5,10 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
@@ -22,12 +19,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -48,19 +43,12 @@ import cz.msebera.android.httpclient.Header;
 import io.getstream.example.R;
 import io.getstream.example.clients.StreamBackendClient;
 
-import static android.Manifest.permission.READ_CONTACTS;
 import static io.getstream.example.utils.Gravatar.md5;
 
 public class RegisterActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
-    private static final int REQUEST_READ_CONTACTS = 0;
     private Context mContext;
     private SharedPreferences preferences;
     private SharedPreferences.Editor prefEditor;
-
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
-
     private UserRegisterTask mAuthTask = null;
 
     // UI references.
@@ -163,46 +151,6 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         return username.length() >= 3;
     }
 
-//    private void populateAutoComplete() {
-//        if (!mayRequestContacts()) {
-//            return;
-//        }
-//
-//        getLoaderManager().initLoader(0, null, this);
-//    }
-
-//    private boolean mayRequestContacts() {
-//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-//            return true;
-//        }
-//        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-//            return true;
-//        }
-//        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-//            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-//                    .setAction(android.R.string.ok, new View.OnClickListener() {
-//                        @Override
-//                        @TargetApi(Build.VERSION_CODES.M)
-//                        public void onClick(View v) {
-//                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-//                        }
-//                    });
-//        } else {
-//            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-//        }
-//        return false;
-//    }
-
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-//                                           @NonNull int[] grantResults) {
-//        if (requestCode == REQUEST_READ_CONTACTS) {
-//            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                populateAutoComplete();
-//            }
-//        }
-//    }
-
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
@@ -239,19 +187,15 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return new CursorLoader(this,
-                // Retrieve data rows for the device user's 'profile' contact.
                 Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
                         ContactsContract.Contacts.Data.CONTENT_DIRECTORY),
 
                 ProfileQuery.PROJECTION,
 
-                // Select only email addresses.
                 ContactsContract.Contacts.Data.MIMETYPE +
                         " = ?", new String[]{ContactsContract.CommonDataKinds.Email
                 .CONTENT_ITEM_TYPE},
 
-                // Show primary email addresses first. Note that there won't be
-                // a primary email address if the user hasn't specified one.
                 ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
     }
 
@@ -259,28 +203,12 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         List<String> emails = new ArrayList<>();
         cursor.moveToFirst();
-//        while (!cursor.isAfterLast()) {
-//            emails.add(cursor.getString(ProfileQuery.ADDRESS));
-//            cursor.moveToNext();
-//        }
-//
-//        addEmailsToAutoComplete(emails);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
 
     }
-
-//    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-//        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-//        ArrayAdapter<String> adapter =
-//                new ArrayAdapter<>(RegisterActivity.this,
-//                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-//
-//        mEmailView.setAdapter(adapter);
-//    }
-
 
     private interface ProfileQuery {
         String[] PROJECTION = {
@@ -323,35 +251,28 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             JSONObject j;
-                            Log.i("register-onsuccess", Integer.toString(statusCode));
-                            Log.i("register-onsuccess", response.toString());
                             try {
                                 String data = response.getString("uuid");
                                 if (data.length() > 0) {
-                                    Log.i("register-success", data);
                                     userUUID = data;
                                     error = "";
                                 } else {
                                     JSONArray errors = response.getJSONArray("errors");
                                     userUUID = "";
                                     error = errors.getString(0);
-                                    Log.i("register-failure", error);
                                     returnStatus = false;
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                                Log.i("register-failure", "unknown, look at stack trace");
                                 returnStatus = false;
                                 userUUID = "";
                                 try {
                                     JSONArray errors = response.getJSONArray("errors");
                                     userUUID = "";
                                     error = errors.getString(0);
-                                    Log.i("register-failure", error);
                                     returnStatus = false;
                                 } catch (JSONException e2) {
                                     e2.printStackTrace();
-                                    Log.i("register-failure", "unknown, look at stack trace");
                                     returnStatus = false;
                                     userUUID = "";
                                 }
@@ -360,20 +281,13 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response) {
-                            Log.i("register-post-fail-code", Integer.toString(statusCode));
-                            Log.i("register-post-fail-thrw", throwable.toString());
-                            Log.i("register-post-fail-resp", response.toString());
                             try {
                                 JSONArray errors = response.getJSONArray("errors");
                                 userUUID = "";
-                                Log.i("reg-fail", errors.toString());
-                                Log.i("reg-fail", errors.getString(0));
                                 error = errors.getString(0);
-                                Log.i("register-failure", error);
                                 returnStatus = false;
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                                Log.i("register-failure", "unknown, look at stack trace");
                                 returnStatus = false;
                                 error = "Unknown error occurred, please try again.";
                                 userUUID = "";
@@ -391,16 +305,12 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
             String toastContent = "";
             if (success) {
-                Log.i("register", "background task succeeded!");
                 prefEditor.putString(getString(R.string.pref_authorid), userUUID);
-                Log.i("reg-post", "email:" + mEmail);
                 prefEditor.putString(getString(R.string.pref_author_email), mEmail);
-                Log.i("reg-post", "username:" + mUsername);
                 prefEditor.putString(getString(R.string.pref_author_username), mUsername);
 
                 String gravatarUrl = "http://www.gravatar.com/avatar/" + md5(mEmail) + "?s=204&d=404";
                 prefEditor.putString(getString(R.string.pref_author_gravatar), gravatarUrl);
-                Log.i("reg-post", "gravatar:" + gravatarUrl);
 
                 prefEditor.commit();
                 toastContent = "Thanks for joining us!";
@@ -408,7 +318,6 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                 toast.show();
                 finish();
             } else {
-                Log.i("register", "background task did not succeed");
                 toastContent = error;
                 Toast toast = Toast.makeText(mContext, toastContent, Toast.LENGTH_LONG);
                 toast.show();
