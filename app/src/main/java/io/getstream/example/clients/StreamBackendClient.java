@@ -43,7 +43,7 @@ public class StreamBackendClient {
         File photoFile = new File(photoUri);
         try {
             params.put("upload", photoFile);
-            params.put("uuid", userUUID);
+            params.put("myUUID", userUUID);
         } catch(FileNotFoundException e) {
             e.printStackTrace();
             return;

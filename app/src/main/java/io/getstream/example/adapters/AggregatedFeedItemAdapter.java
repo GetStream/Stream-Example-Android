@@ -33,6 +33,7 @@ public class AggregatedFeedItemAdapter extends ArrayAdapter<AggregatedFeedItem> 
 
     private static class ViewHolder {
         TextView notification_message;
+        TextView created_date ;
         GridView gridView;
         ImageView profileImage;
     }
@@ -57,6 +58,7 @@ public class AggregatedFeedItemAdapter extends ArrayAdapter<AggregatedFeedItem> 
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.aggregated_feed_item, parent, false);
 
+            viewHolder.created_date = (TextView) convertView.findViewById(R.id.aggregated_date);
             viewHolder.notification_message = (TextView) convertView.findViewById(R.id.feed_item_aggregated_message);
             viewHolder.profileImage = (ImageView) convertView.findViewById(R.id.aggfeed_item_profile_image);
 
@@ -76,6 +78,8 @@ public class AggregatedFeedItemAdapter extends ArrayAdapter<AggregatedFeedItem> 
             notificationMessage = notificationMessage + "s";
         }
         viewHolder.notification_message.setText(notificationMessage);
+
+        viewHolder.created_date.setText(feed_item.getCreatedDate().substring(0, 10));
 
         String hash = md5(feed_item.getAuthorEmail());
         gravatar_url = "http://www.gravatar.com/avatar/" + hash + "?s=204&d=404";

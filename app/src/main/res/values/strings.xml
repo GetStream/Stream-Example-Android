@@ -4,8 +4,8 @@
     <string name="pref_author_username">streamUsername</string>
     <string name="pref_author_gravatar">streamUserGravatar</string>
 
-    <!--<string name="backend_url">"http://go.sl.gtstrm.com:3000"</string>-->
-    <string name="backend_url">"http://10.0.2.2:3000"</string>
+    <string name="backend_url">"http://go.sl.gtstrm.com:3000"</string>
+    <!--<string name="backend_url">"http://10.0.2.2:3000"</string>-->
 
     <string name="app_name">GetStream.io Example</string>
 

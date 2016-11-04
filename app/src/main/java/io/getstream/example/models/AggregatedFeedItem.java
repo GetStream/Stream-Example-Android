@@ -50,7 +50,7 @@ public class AggregatedFeedItem {
             this.author_email = object.getString("author_email");
             this.author_name = object.getString("author_name");
             this.author_uuid = object.getString("author_id");
-            this.created_date = object.getString("created_date").substring(0, 9);
+            this.created_date = object.getString("created_date").substring(0, 10);
 
             JSONArray photos = object.getJSONArray("photos");
             for (int i=0; i < photos.length(); i++) {
