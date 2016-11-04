@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -43,7 +44,6 @@ public class MainActivity extends AppCompatActivity
     private static final int CONST_ACTIVITY_REGISTER = 1;
     private static final int CONST_ACTIVITY_PHOTO = 2;
 
-    private ListView feedList;
     private String title;
     private Fragment fragment;
     private Intent intent;
@@ -86,14 +86,23 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         setNavByRegistered();
+        RefreshGlobalFeed();
+    }
 
-        // default view is global feed
-        title = getString(R.string.menu_global_feed);
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        RefreshGlobalFeed();
+    }
+
+    private void RefreshGlobalFeed() {
+        Log.i("main-activity", "refreshing global feed");
+        // relaunch the global feed activity
+        getSupportActionBar().setTitle(getString(R.string.menu_global_feed));
         fragment = new GlobalFeedFragment(getApplicationContext());
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.main_container, fragment);
         ft.commit();
-        getSupportActionBar().setTitle(title);
     }
 
     private void setNavByRegistered() {
@@ -152,6 +161,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+        RefreshGlobalFeed();
     }
 
     @Override
@@ -247,7 +257,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     protected void launchActivity(String activity, Context context) {
-        Intent intent = null;
+        intent = null;
         int requestCode = 0;
 
         if (activity.equals("register")) {
@@ -275,10 +285,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        Log.i("main", "main activity is resuming");
-//        Log.i("main-req", Integer.toString(requestCode));
-//        Log.i("main-res", Integer.toString(resultCode));
-
         switch (requestCode) {
             case CONST_ACTIVITY_PHOTO:
 //                Log.i("main", "returned from taking a photo");
@@ -288,14 +294,5 @@ public class MainActivity extends AppCompatActivity
                 setNavByRegistered();
                 break;
         }
-
-        // refresh the global feed
-        title = getString(R.string.menu_global_feed);
-        fragment = new GlobalFeedFragment(getApplicationContext());
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.main_container, fragment);
-        ft.commit();
-        getSupportActionBar().setTitle(title);
-
     }
 }
