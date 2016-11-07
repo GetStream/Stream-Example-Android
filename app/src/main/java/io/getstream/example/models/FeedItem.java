@@ -11,7 +11,7 @@ public class FeedItem {
     private String author_id;
     private String photo_url;
     private String photo_uuid;
-    private String created_date;
+    private Integer created_date;
     private Boolean iLikePhoto;
     private Boolean iFollowAuthor;
     private Boolean supressGravatar;
@@ -39,7 +39,7 @@ public class FeedItem {
             this.author_id = object.getString("author_id");
             this.photo_url = object.getString("photo_url");
             this.photo_uuid = object.getString("photo_uuid");
-            this.created_date = object.getString("created_date");
+            this.created_date = object.getInt("created_date");
             this.iLikePhoto = object.getBoolean("ilikethis");
             this.photoLikes = object.getInt("likes");
             this.iFollowAuthor = object.getBoolean("doifollow");
@@ -57,7 +57,7 @@ public class FeedItem {
             this.author_id = object.getString("author_id");
             this.photo_url = object.getString("photo_url");
             this.photo_uuid = object.getString("photo_uuid");
-            this.created_date = object.getString("created_date");
+            this.created_date = object.getInt("created_date");
             this.iLikePhoto = object.getBoolean("ilikethis");
             this.photoLikes = object.getInt("likes");
             this.iFollowAuthor = object.getBoolean("doifollow");
@@ -71,7 +71,7 @@ public class FeedItem {
             String author_id,
             String author_name,
             String author_email,
-            String created_date,
+            Integer created_date,
             Boolean iLikePhoto,
             Integer photoLikes,
             Boolean iFollowAuthor,
@@ -101,7 +101,7 @@ public class FeedItem {
     public String getAuthorEmail() {
         return this.author_email;
     }
-    public String getCreatedDate() {
+    public Integer getCreatedDate() {
         return this.created_date;
     }
     public String getPhotoUrl() {

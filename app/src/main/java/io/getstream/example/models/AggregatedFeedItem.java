@@ -11,7 +11,7 @@ public class AggregatedFeedItem {
     private ArrayList<String> photo_url_list;
     private String author_email;
     private String author_name;
-    private String created_date;
+    private Integer created_date;
 
     /*
         {
@@ -46,7 +46,7 @@ public class AggregatedFeedItem {
         try {
             this.author_email = object.getString("author_email");
             this.author_name = object.getString("author_name");
-            this.created_date = object.getString("created_date").substring(0, 10);
+            this.created_date = object.getInt("created_date");
 
             JSONArray photos = object.getJSONArray("photos");
             for (int i=0; i < photos.length(); i++) {
@@ -68,7 +68,7 @@ public class AggregatedFeedItem {
     public ArrayList<String> getPhotoURLs() {
         return this.photo_url_list;
     }
-    public String getCreatedDate() {
+    public Integer getCreatedDate() {
         return this.created_date;
     }
 }

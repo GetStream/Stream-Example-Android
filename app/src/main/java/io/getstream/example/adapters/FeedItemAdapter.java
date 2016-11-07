@@ -3,6 +3,7 @@ package io.getstream.example.adapters;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,7 +84,10 @@ public class FeedItemAdapter extends ArrayAdapter<FeedItem> {
         }
 
         viewHolder.author_name.setText(feed_item.getAuthorName());
-        viewHolder.created_date.setText(feed_item.getCreatedDate());
+
+        String createdStr = (String) DateUtils.getRelativeDateTimeString(myContext, (long) feed_item.getCreatedDate()*1000, DateUtils.SECOND_IN_MILLIS, DateUtils.DAY_IN_MILLIS, 0);
+        viewHolder.created_date.setText(createdStr);
+
         viewHolder.photoLikeCount.setText(Integer.toString(feed_item.getPhotoLikes()) + " likes");
 
         authorUUID = feed_item.getAuthorId();

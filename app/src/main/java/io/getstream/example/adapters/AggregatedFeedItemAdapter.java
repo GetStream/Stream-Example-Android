@@ -1,6 +1,7 @@
 package io.getstream.example.adapters;
 
 import android.content.Context;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,7 +76,8 @@ public class AggregatedFeedItemAdapter extends ArrayAdapter<AggregatedFeedItem> 
         }
         viewHolder.notification_message.setText(notificationMessage);
 
-        viewHolder.created_date.setText(feed_item.getCreatedDate().substring(0, 10));
+        String createdStr = (String) DateUtils.getRelativeDateTimeString(myContext, (long) feed_item.getCreatedDate()*1000, DateUtils.HOUR_IN_MILLIS, DateUtils.DAY_IN_MILLIS, 0);
+        viewHolder.created_date.setText(createdStr);
 
         String hash = md5(feed_item.getAuthorEmail());
         gravatar_url = "http://www.gravatar.com/avatar/" + hash + "?s=204&d=404";
