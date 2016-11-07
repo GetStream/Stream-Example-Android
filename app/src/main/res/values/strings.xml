@@ -23,7 +23,7 @@
     <string name="regscreen_intro_text">Open Your Account</string>
     <string name="regscreen_placeholder_username">Username</string>
     <string name="regscreen_placeholder_email">Email Address</string>
-    <string name="regscreen_agree_to_terms">By tapping Sign Up &amp; Accept, you agree to the <a href="http://getstream.io">Terms of Service</a> and <a href="http://getstream.io">Policy</a>.</string>
+    <string name="regscreen_agree_to_terms">By tapping Sign Up &amp; Accept, you agree to the <a href="http://getstream.io/legal">Terms of Service</a> and <a href="http://getstream.io/legal/privacy">Privacy Policy</a>.</string>
 
     <string name="title_activity_feed">FeedActivity</string>
     <string name="action_settings">Settings</string>
