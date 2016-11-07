@@ -71,14 +71,6 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                launchActivity("photo", getApplicationContext());
-            }
-        });
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -86,6 +78,7 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         setNavByRegistered();
+        setFABByRegistered();
         RefreshGlobalFeed();
     }
 
@@ -118,6 +111,21 @@ public class MainActivity extends AppCompatActivity
             ft.commit();
     }
 
+    private void setFABByRegistered() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        if (mUserUUID != "") {
+            fab.setVisibility(View.VISIBLE);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    launchActivity("photo", getApplicationContext());
+                }
+            });
+        } else {
+            fab.setVisibility(View.GONE);
+            fab.setOnClickListener(null);
+        }
+    }
     private void setNavByRegistered() {
         Log.i("main-activity", "setting nav menu");
         TextView t;
@@ -254,6 +262,7 @@ public class MainActivity extends AppCompatActivity
                 title = getString(R.string.menu_global_feed);
                 fragment = new GlobalFeedFragment(getApplicationContext());
                 setNavByRegistered();
+                setFABByRegistered();
                 break;
         }
 
@@ -306,6 +315,7 @@ public class MainActivity extends AppCompatActivity
             case CONST_ACTIVITY_REGISTER:
 //                Log.i("main", "returned from registering");
                 setNavByRegistered();
+                setFABByRegistered();
                 break;
         }
     }
