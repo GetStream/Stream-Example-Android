@@ -50,7 +50,6 @@ public class UsersFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
         toast = new Toast(getActivity().getApplicationContext());
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getAppContext());
         myUUID = sharedPrefs.getString(getString(R.string.pref_authorid), "");
