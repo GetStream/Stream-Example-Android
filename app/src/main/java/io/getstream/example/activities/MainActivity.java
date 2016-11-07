@@ -102,7 +102,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void RefreshGlobalFeed() {
-        Log.i("main-activity", "refreshing global feed");
         // relaunch the global feed activity
         getSupportActionBar().setTitle(getString(R.string.menu_global_feed));
         fragment = new GlobalFeedFragment(getApplicationContext());
@@ -127,7 +126,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
     private void setNavByRegistered() {
-        Log.i("main-activity", "setting nav menu");
         TextView t;
         ImageView i;
 

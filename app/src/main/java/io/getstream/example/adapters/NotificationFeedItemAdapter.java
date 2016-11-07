@@ -224,12 +224,12 @@ public class NotificationFeedItemAdapter extends ArrayAdapter<NotificationFeedIt
                     break;
                 case "like":
                     likePhoto(v, "like", this.UUID);
-                    likeButton.setBackgroundResource(android.R.drawable.btn_star_big_on);
+                    likeButton.setBackgroundResource(R.drawable.ic_favorite_black_24dp);
                     likeButton.setOnClickListener(new LikeClickListener("unlike", UUID));
                     break;
                 case "unlike":
                     likePhoto(v, "unlike", this.UUID);
-                    likeButton.setBackgroundResource(android.R.drawable.btn_star_big_off);
+                    likeButton.setBackgroundResource(R.drawable.ic_favorite_border_black_24dp);
                     likeButton.setOnClickListener(new LikeClickListener("like", UUID));
                     break;
             }

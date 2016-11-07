@@ -79,7 +79,7 @@
             android:layout_height="32dp"
             android:minHeight="32dp"
             android:minWidth="32dp"
-            android:background="@android:drawable/btn_star_big_off" />
+            android:background="@drawable/ic_favorite_border_black_24dp" />
 
         <TextView xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/feed_item_likes"

@@ -114,7 +114,7 @@ public class FeedItemAdapter extends ArrayAdapter<FeedItem> {
 
         if (myUUID.equals("")) {
             // no stars lit up if you're not logged in
-            viewHolder.btnLikePhoto.setBackgroundResource(android.R.drawable.btn_star_big_off);
+            viewHolder.btnLikePhoto.setBackgroundResource(R.drawable.ic_favorite_border_black_24dp);
             // no click handler
             viewHolder.btnLikePhoto.setOnClickListener(null);
         } else {
@@ -124,14 +124,14 @@ public class FeedItemAdapter extends ArrayAdapter<FeedItem> {
             } else {
                 if (iLikePhoto) {
                     // turn star on since we like this already
-                    viewHolder.btnLikePhoto.setBackgroundResource(android.R.drawable.btn_star_big_on);
+                    viewHolder.btnLikePhoto.setBackgroundResource(R.drawable.ic_favorite_black_24dp);
                     // set click handler to unlike
                     viewHolder.btnLikePhoto.setOnClickListener(
                             new LikeClickListener("unlike", viewHolder)
                     );
                 } else {
                     // turn star off since we don't like this yet
-                    viewHolder.btnLikePhoto.setBackgroundResource(android.R.drawable.btn_star_big_off);
+                    viewHolder.btnLikePhoto.setBackgroundResource(R.drawable.ic_favorite_border_black_24dp);
                     // set click handler to like
                     viewHolder.btnLikePhoto.setOnClickListener(
                             new LikeClickListener("like", viewHolder)
@@ -264,13 +264,13 @@ public class FeedItemAdapter extends ArrayAdapter<FeedItem> {
                     break;
                 case "like":
                     likePhoto(v, "like", UUID);
-                    this.viewHolder.btnLikePhoto.setBackgroundResource(android.R.drawable.btn_star_big_on);
+                    this.viewHolder.btnLikePhoto.setBackgroundResource(R.drawable.ic_favorite_black_24dp);
                     this.viewHolder.btnLikePhoto.setOnClickListener(new LikeClickListener("unlike", this.viewHolder));
                     alterCountView = 1;
                     break;
                 case "unlike":
                     likePhoto(v, "unlike", UUID);
-                    this.viewHolder.btnLikePhoto.setBackgroundResource(android.R.drawable.btn_star_big_off);
+                    this.viewHolder.btnLikePhoto.setBackgroundResource(R.drawable.ic_favorite_border_black_24dp);
                     this.viewHolder.btnLikePhoto.setOnClickListener(new LikeClickListener("like", this.viewHolder));
                     alterCountView = -1;
                     break;
