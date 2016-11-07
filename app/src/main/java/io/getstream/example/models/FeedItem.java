@@ -123,20 +123,7 @@ public class FeedItem {
         return this.supressGravatar;
     }
 
-    public void setAuthorName(String val) {
-        this.author_name = val;
+    public void setPhotoLikes(Integer val) {
+        this.photoLikes = val;
     }
-    public void setAuthorEmail(String val) {
-        this.author_email = val;
-    }
-    public void setAuthorId(String val) {
-        this.author_id = val;
-    }
-    public void setPhotoUrl(String val) {
-        this.photo_url = val;
-    }
-    public void setCreatedDate(String val) {
-        this.created_date = val;
-    }
-
 }

@@ -48,6 +48,7 @@ public class FeedItemAdapter extends ArrayAdapter<FeedItem> {
         TextView photoLikeCount;
         Button btnLikePhoto;
         Button btnFollowAuthor;
+        FeedItem feedItem;
     }
 
     public FeedItemAdapter(Context context, ArrayList<FeedItem> feedItems) {
@@ -76,8 +77,7 @@ public class FeedItemAdapter extends ArrayAdapter<FeedItem> {
             viewHolder.photoLikeCount = (TextView) convertView.findViewById(R.id.feed_item_likes);
             viewHolder.btnLikePhoto = (Button) convertView.findViewById(R.id.feeditem_like_button);
             viewHolder.btnFollowAuthor = (Button) convertView.findViewById(R.id.feed_follow_button);
-
-            convertView.setTag(viewHolder);
+            viewHolder.feedItem = feed_item;
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
@@ -88,27 +88,51 @@ public class FeedItemAdapter extends ArrayAdapter<FeedItem> {
 
         authorUUID = feed_item.getAuthorId();
 
+        Picasso.with(myContext)
+                .load(feed_item.getPhotoUrl())
+                .placeholder(R.drawable.no_image)
+                .into(viewHolder.photoImage);
+
+        if (!feed_item.getSupressGravatar()) {
+            String hash = md5(feed_item.getAuthorEmail());
+            String gravatarUrl = "http://www.gravatar.com/avatar/" + hash + "?s=204&d=404";
+            Picasso.with(myContext)
+                    .load(gravatarUrl)
+                    .placeholder(pickRandomAnimalAvatar())
+                    .into(viewHolder.profileImage);
+        } else {
+            viewHolder.profileImage.setVisibility(View.GONE);
+            viewHolder.author_name.setVisibility(View.GONE);
+        }
+
         Boolean iFollowAuthor = feed_item.getIFollowAuthor();
         Boolean iLikePhoto = feed_item.getILikePhoto();
 
         if (myUUID.equals("")) {
             // no stars lit up if you're not logged in
             viewHolder.btnLikePhoto.setBackgroundResource(android.R.drawable.btn_star_big_off);
+            // no click handler
+            viewHolder.btnLikePhoto.setOnClickListener(null);
         } else {
-            if (iLikePhoto) {
-                // turn star on since we like this already
-                viewHolder.btnLikePhoto.setBackgroundResource(android.R.drawable.btn_star_big_on);
-                // set click handler to unlike
-                viewHolder.btnLikePhoto.setOnClickListener(
-                        new LikeClickListener("unlike", feed_item.getPhotoUUID())
-                );
+            if (authorUUID.equals(myUUID)) {
+                // cannot like your own photos
+                viewHolder.btnLikePhoto.setOnClickListener(null);
             } else {
-                // turn star off since we don't like this yet
-                viewHolder.btnLikePhoto.setBackgroundResource(android.R.drawable.btn_star_big_off);
-                // set click handler to like
-                viewHolder.btnLikePhoto.setOnClickListener(
-                        new LikeClickListener("like", feed_item.getPhotoUUID())
-                );
+                if (iLikePhoto) {
+                    // turn star on since we like this already
+                    viewHolder.btnLikePhoto.setBackgroundResource(android.R.drawable.btn_star_big_on);
+                    // set click handler to unlike
+                    viewHolder.btnLikePhoto.setOnClickListener(
+                            new LikeClickListener("unlike", viewHolder)
+                    );
+                } else {
+                    // turn star off since we don't like this yet
+                    viewHolder.btnLikePhoto.setBackgroundResource(android.R.drawable.btn_star_big_off);
+                    // set click handler to like
+                    viewHolder.btnLikePhoto.setOnClickListener(
+                            new LikeClickListener("like", viewHolder)
+                    );
+                }
             }
         }
 
@@ -133,22 +157,7 @@ public class FeedItemAdapter extends ArrayAdapter<FeedItem> {
             }
         }
 
-        Picasso.with(myContext)
-                .load(feed_item.getPhotoUrl())
-                .placeholder(R.drawable.no_image)
-                .into(viewHolder.photoImage);
-
-        if (!feed_item.getSupressGravatar()) {
-            String hash = md5(feed_item.getAuthorEmail());
-            String gravatarUrl = "http://www.gravatar.com/avatar/" + hash + "?s=204&d=404";
-            Picasso.with(myContext)
-                    .load(gravatarUrl)
-                    .placeholder(pickRandomAnimalAvatar())
-                    .into(viewHolder.profileImage);
-        } else {
-            viewHolder.profileImage.setVisibility(View.GONE);
-            viewHolder.author_name.setVisibility(View.GONE);
-        }
+        convertView.setTag(viewHolder);
         return convertView;
     }
 
@@ -225,35 +234,55 @@ public class FeedItemAdapter extends ArrayAdapter<FeedItem> {
                     });
         }
     }
+
     public class LikeClickListener implements View.OnClickListener {
         String Action;
-        String UUID;
+        ViewHolder viewHolder;
 
-        public LikeClickListener(String action, String UUID) {
+        public LikeClickListener(String action, ViewHolder viewHolder) {
             this.Action = action;
-            this.UUID = UUID;
+            this.viewHolder = viewHolder;
         }
 
         @Override
         public void onClick(View v) {
-            Boolean success;
+            Integer alterCountView = 0;
+            String UUID = this.viewHolder.feedItem.getPhotoUUID();
 
-            Button likeButton = (Button) v.findViewById(R.id.feeditem_like_button);
+//            Button likeButton = (Button) this.viewHolder.btnLikePhoto; //findViewById(R.id.feeditem_like_button);
+//            TextView likeCount = (TextView) v.findViewById(R.id.feed_item_likes);
+//            Boolean tvnull = likeCount == null;
+//            Log.i("clk-tvnull", tvnull.toString());
 
             switch (this.Action) {
                 default:
                     // should never get here
                     break;
                 case "like":
-                    likePhoto(v, "like", this.UUID);
-                    likeButton.setBackgroundResource(android.R.drawable.btn_star_big_on);
-                    likeButton.setOnClickListener(new LikeClickListener("unlike", UUID));
+                    likePhoto(v, "like", UUID);
+                    this.viewHolder.btnLikePhoto.setBackgroundResource(android.R.drawable.btn_star_big_on);
+                    this.viewHolder.btnLikePhoto.setOnClickListener(new LikeClickListener("unlike", this.viewHolder));
+                    alterCountView = 1;
                     break;
                 case "unlike":
-                    likePhoto(v, "unlike", this.UUID);
-                    likeButton.setBackgroundResource(android.R.drawable.btn_star_big_off);
-                    likeButton.setOnClickListener(new LikeClickListener("like", UUID));
+                    likePhoto(v, "unlike", UUID);
+                    this.viewHolder.btnLikePhoto.setBackgroundResource(android.R.drawable.btn_star_big_off);
+                    this.viewHolder.btnLikePhoto.setOnClickListener(new LikeClickListener("like", this.viewHolder));
+                    alterCountView = -1;
                     break;
+            }
+
+            if (alterCountView != 0) {
+                Integer newLikes = this.viewHolder.feedItem.getPhotoLikes() + alterCountView ;
+                if (newLikes < 0) {
+                    newLikes = 0;
+                }
+                String likesString = newLikes.toString() + " like";
+                if (newLikes != 1) {
+                    likesString += "s" ;
+                }
+                this.viewHolder.feedItem.setPhotoLikes(newLikes);
+                this.viewHolder.photoLikeCount.setText(likesString);
             }
         }
 
@@ -285,6 +314,8 @@ public class FeedItemAdapter extends ArrayAdapter<FeedItem> {
 
                         public void onFailure(int statusCode, Header[] headers, JSONArray response) {
                             // TODO should handle error conditions
+                            toast = Toast.makeText(MyApplication.getAppContext(), "there was an error, try again or contact support", Toast.LENGTH_LONG);
+                            toast.show();
                         }
                     });
         }
