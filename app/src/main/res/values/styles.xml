@@ -5,6 +5,14 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
+        <item name="android:textColor">@color/stream_dark_black</item>
+        <item name="android:titleTextColor">@color/stream_dark_black</item>
+        <item name="android:actionMenuTextColor">@color/stream_dark_black</item>
+        <item name="android:textColorSecondary">@color/stream_dark_black</item>
+        <item name="android:subtitleTextColor">@color/stream_dark_black</item>
+        <item name="android:textColorPrimary">@color/stream_dark_black</item>
+        <item name="android:textColorTertiary">@color/stream_dark_black</item>
+
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
 
@@ -18,8 +26,7 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="ToolbarTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- this works for the main activity and its fragments only -->
-        <item name="android:background">@android:color/holo_red_dark</item>
+        <!--<item name="android:background">@android:color/holo_red_dark</item>-->
         <item name="android:textColor">@color/stream_dark_black</item>
     </style>
 
