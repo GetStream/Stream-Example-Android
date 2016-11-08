@@ -126,4 +126,7 @@ public class FeedItem {
     public void setPhotoLikes(Integer val) {
         this.photoLikes = val;
     }
+    public void setILikePhoto(Boolean val) {
+        this.iLikePhoto = val;
+    }
 }

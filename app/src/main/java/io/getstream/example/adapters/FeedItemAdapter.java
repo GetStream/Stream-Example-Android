@@ -258,6 +258,8 @@ public class FeedItemAdapter extends ArrayAdapter<FeedItem> {
 //            Boolean tvnull = likeCount == null;
 //            Log.i("clk-tvnull", tvnull.toString());
 
+            Boolean iLikePhotoNow = true ;
+
             switch (this.Action) {
                 default:
                     // should never get here
@@ -273,6 +275,7 @@ public class FeedItemAdapter extends ArrayAdapter<FeedItem> {
                     this.viewHolder.btnLikePhoto.setBackgroundResource(R.drawable.ic_favorite_border_black_24dp);
                     this.viewHolder.btnLikePhoto.setOnClickListener(new LikeClickListener("like", this.viewHolder));
                     alterCountView = -1;
+                    iLikePhotoNow = false;
                     break;
             }
 
@@ -286,6 +289,7 @@ public class FeedItemAdapter extends ArrayAdapter<FeedItem> {
                     likesString += "s" ;
                 }
                 this.viewHolder.feedItem.setPhotoLikes(newLikes);
+                this.viewHolder.feedItem.setILikePhoto(iLikePhotoNow);
                 this.viewHolder.photoLikeCount.setText(likesString);
             }
         }

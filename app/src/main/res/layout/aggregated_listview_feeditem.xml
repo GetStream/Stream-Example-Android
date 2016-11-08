@@ -36,8 +36,8 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:gravity="end"
             android:layout_gravity="center_vertical"
+            android:gravity="end"
             android:orientation="horizontal">
 
             <TextView
@@ -58,17 +58,15 @@
         android:layout_marginStart="48dp"
         android:orientation="horizontal">
 
-        <GridView
+        <io.getstream.example.utils.StreamGridView
             android:id="@+id/aggregated_feed_gridview"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:animationCache="false"
-            android:columnWidth="128dp"
-            android:fastScrollEnabled="true"
-            android:minHeight="136dp"
-            android:numColumns="auto_fit"
-            android:scrollingCache="false"
+            android:gravity="center"
+            android:horizontalSpacing="2dp"
+            android:isScrollContainer="false"
+            android:numColumns="3"
             android:stretchMode="columnWidth"
-            android:verticalSpacing="8dp" />
+            android:verticalSpacing="20dp" />
     </LinearLayout>
 </LinearLayout>
