@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -12,8 +12,6 @@
         <item name="android:subtitleTextColor">@color/stream_dark_black</item>
         <item name="android:textColorPrimary">@color/stream_dark_black</item>
         <item name="android:textColorTertiary">@color/stream_dark_black</item>
-
-        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -21,23 +19,18 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBar" parent="ThemeOverlay.AppCompat.ActionBar" >
+    <item name="android:textColor">@color/stream_dark_black</item>
+    <item name="android:titleTextColor">@color/stream_dark_black</item>
+</style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    
 
-    <style name="ToolbarTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!--<item name="android:background">@android:color/holo_red_dark</item>-->
-        <item name="android:textColor">@color/stream_dark_black</item>
-    </style>
-
-    <style name="ToolbarPopupOverlay" parent="ThemeOverlay.AppCompat.Light">
-        <!-- is this even necessary? -->
-        <item name="android:background">@android:color/holo_green_dark</item>
-        <item name="android:textColor">@android:color/holo_purple</item>
-    </style>
-
-    <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
-        <item name="spinBars">true</item>
-        <item name="color">@android:color/holo_green_dark</item>
-    </style>
 </resources>
+
+    <!--
+    bright_foreground_material_dark
+    background_floating_material_light
+    foreground_material_dark
+    -->

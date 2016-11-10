@@ -164,7 +164,7 @@ public class UserAdapter extends ArrayAdapter<User> {
                                     if (finalAction.equals("unfollow")) {
                                         toastPrefix = "no longer following ";
                                     }
-                                    toast = Toast.makeText(MyApplication.getAppContext(), toastPrefix+finalUsername, Toast.LENGTH_LONG);
+                                    toast = Toast.makeText(MyApplication.getAppContext(), toastPrefix+finalUsername, Toast.LENGTH_SHORT);
                                     toast.show();
                                 }
                             } catch (JSONException e) {

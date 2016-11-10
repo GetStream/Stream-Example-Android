@@ -43,7 +43,7 @@ import io.getstream.example.factories.AlbumStorageDirFactory;
 import io.getstream.example.factories.BaseAlbumDirFactory;
 import io.getstream.example.factories.FroyoAlbumDirFactory;
 
-public class PhotoIntentActivity extends Activity {
+public class PhotoIntentActivity extends AppCompatActivity {
     private Context myContext = MyApplication.getAppContext();
     private SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(myContext);
     private String myUUID = sharedPrefs.getString(myContext.getString(R.string.pref_authorid), "");
@@ -169,7 +169,7 @@ public class PhotoIntentActivity extends Activity {
                         try {
                             String data = response.getString("status");
                             if (data.equals("processing")) {
-                                toast = Toast.makeText(MyApplication.getAppContext(), "photo is uploading", Toast.LENGTH_LONG);
+                                toast = Toast.makeText(MyApplication.getAppContext(), "photo is uploading", Toast.LENGTH_SHORT);
                                 toast.show();
                             }
                         } catch (JSONException e) {

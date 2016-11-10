@@ -1,9 +1,13 @@
 package io.getstream.example.activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
@@ -126,7 +130,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
     private void setNavByRegistered() {
-        TextView t;
+        TextView t1, t2;
         ImageView i;
 
         mUserUUID = sharedPrefs.getString(getString(R.string.pref_authorid), "");
@@ -139,11 +143,9 @@ public class MainActivity extends AppCompatActivity
         Menu navMenu = navigationView.getMenu();
         View navHeader =  navigationView.getHeaderView(0);
 
-        t = (TextView) navHeader.findViewById(R.id.nav_profile_email);
-        t.setText(mEmail);
-        t = (TextView) navHeader.findViewById(R.id.nav_profile_username);
-        t.setText(mUsername);
         i = (ImageView) navHeader.findViewById(R.id.nav_profile_image);
+        t1 = (TextView) navHeader.findViewById(R.id.nav_profile_email);
+        t2 = (TextView) navHeader.findViewById(R.id.nav_profile_username);
 
         if (mUserUUID.length() == 0) {
             navMenu.findItem(R.id.nav_take_photo).setVisible(false);
@@ -155,6 +157,8 @@ public class MainActivity extends AppCompatActivity
             navMenu.findItem(R.id.nav_register).setVisible(true);
             navMenu.findItem(R.id.nav_sign_out).setVisible(false);
             i.setImageResource(android.R.drawable.sym_def_app_icon);
+            t1.setText(getString(R.string.your_username_here));
+            t2.setText(getString(R.string.your_email_address_com));
         } else {
             navMenu.findItem(R.id.nav_take_photo).setVisible(true);
             navMenu.findItem(R.id.nav_my_feed).setVisible(true);
@@ -170,7 +174,10 @@ public class MainActivity extends AppCompatActivity
                         .placeholder(pickRandomAnimalAvatar())
                         .into(i);
             }
+            t1.setText(mEmail);
+            t2.setText(mUsername);
         }
+
     }
 
     @Override

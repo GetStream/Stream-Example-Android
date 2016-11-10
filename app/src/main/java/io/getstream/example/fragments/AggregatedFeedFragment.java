@@ -90,7 +90,7 @@ public class AggregatedFeedFragment extends Fragment {
 
                             if (data.length() == 0) {
                                 String toastContent = "You have no items in your aggregated feed yet";
-                                Toast toast = Toast.makeText(getActivity(), toastContent, Toast.LENGTH_LONG);
+                                Toast toast = Toast.makeText(getActivity(), toastContent, Toast.LENGTH_SHORT);
                                 toast.show();
 
                             }

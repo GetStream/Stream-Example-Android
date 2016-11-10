@@ -189,7 +189,7 @@ public class NotificationFeedItemAdapter extends ArrayAdapter<NotificationFeedIt
                                     if (finalAction.equals("unfollow")) {
                                         toastPrefix = "no longer following ";
                                     }
-                                    toast = Toast.makeText(MyApplication.getAppContext(), toastPrefix+finalUsername, Toast.LENGTH_LONG);
+                                    toast = Toast.makeText(MyApplication.getAppContext(), toastPrefix+finalUsername, Toast.LENGTH_SHORT);
                                     toast.show();
                                 }
                             } catch (JSONException e) {
@@ -253,7 +253,7 @@ public class NotificationFeedItemAdapter extends ArrayAdapter<NotificationFeedIt
                             try {
                                 String data = response.getString("status");
                                 if (data.equals("success")) {
-                                    toast = Toast.makeText(MyApplication.getAppContext(), finalAction+"d", Toast.LENGTH_LONG);
+                                    toast = Toast.makeText(MyApplication.getAppContext(), finalAction+"d", Toast.LENGTH_SHORT);
                                     toast.show();
                                 }
                             } catch (JSONException e) {

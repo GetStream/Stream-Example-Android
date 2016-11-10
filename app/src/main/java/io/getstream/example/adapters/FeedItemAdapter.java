@@ -224,7 +224,7 @@ public class FeedItemAdapter extends ArrayAdapter<FeedItem> {
                                     if (finalAction.equals("unfollow")) {
                                         toastPrefix = "no longer following ";
                                     }
-                                    toast = Toast.makeText(MyApplication.getAppContext(), toastPrefix+finalUsername, Toast.LENGTH_LONG);
+                                    toast = Toast.makeText(MyApplication.getAppContext(), toastPrefix+finalUsername, Toast.LENGTH_SHORT);
                                     toast.show();
                                 }
                             } catch (JSONException e) {
@@ -312,7 +312,7 @@ public class FeedItemAdapter extends ArrayAdapter<FeedItem> {
                             try {
                                 String data = response.getString("status");
                                 if (data.equals("success")) {
-                                    toast = Toast.makeText(MyApplication.getAppContext(), finalAction+"d", Toast.LENGTH_LONG);
+                                    toast = Toast.makeText(MyApplication.getAppContext(), finalAction+"d", Toast.LENGTH_SHORT);
                                     toast.show();
                                 }
                             } catch (JSONException e) {
@@ -322,7 +322,7 @@ public class FeedItemAdapter extends ArrayAdapter<FeedItem> {
 
                         public void onFailure(int statusCode, Header[] headers, JSONArray response) {
                             // TODO should handle error conditions
-                            toast = Toast.makeText(MyApplication.getAppContext(), "there was an error, try again or contact support", Toast.LENGTH_LONG);
+                            toast = Toast.makeText(MyApplication.getAppContext(), "there was an error, try again or contact support", Toast.LENGTH_SHORT);
                             toast.show();
                         }
                     });

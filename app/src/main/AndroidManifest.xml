@@ -40,7 +40,6 @@
             android:label="@string/menu_register"
             android:parentActivityName="io.getstream.example.activities.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -50,8 +49,7 @@
             android:name=".activities.PhotoIntentActivity"
             android:label="@string/menu_take_photo"
             android:parentActivityName="io.getstream.example.activities.MainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme">
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="io.getstream.example.activities.MainActivity" />

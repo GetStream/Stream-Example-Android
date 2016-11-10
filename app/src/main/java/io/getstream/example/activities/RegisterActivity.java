@@ -96,6 +96,19 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        View.OnKeyListener enterKeyHandler = new View.OnKeyListener(){
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event){
+                if (keyCode == event.KEYCODE_ENTER){
+                    attemptLogin();
+                }
+                return false;
+            }
+        };
+
+        mUsername.setOnKeyListener(enterKeyHandler);
+        mEmailView.setOnKeyListener(enterKeyHandler);
     }
 
     private void attemptLogin() {
@@ -317,12 +330,12 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
                 prefEditor.commit();
                 toastContent = "Thanks for joining us!";
-                Toast toast = Toast.makeText(mContext, toastContent, Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(mContext, toastContent, Toast.LENGTH_SHORT);
                 toast.show();
                 finish();
             } else {
                 toastContent = error;
-                Toast toast = Toast.makeText(mContext, toastContent, Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(mContext, toastContent, Toast.LENGTH_SHORT);
                 toast.show();
             }
         }
