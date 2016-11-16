@@ -40,11 +40,7 @@ public class UsersFragment extends Fragment {
 
 
     public UsersFragment() {
-        // you don't want this one
-    }
-
-    public UsersFragment(Context context) {
-        myContext = context;
+        myContext = MyApplication.getAppContext();
     }
 
     @Override

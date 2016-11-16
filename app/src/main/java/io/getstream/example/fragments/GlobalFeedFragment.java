@@ -23,6 +23,7 @@ import java.util.List;
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.message.BasicHeader;
 
+import io.getstream.example.MyApplication;
 import io.getstream.example.R;
 import io.getstream.example.adapters.FeedItemAdapter;
 import io.getstream.example.adapters.FeedsAdapter;
@@ -40,11 +41,7 @@ public class GlobalFeedFragment extends Fragment {
     private Toast toast;
 
     public GlobalFeedFragment() {
-        // you don't want this one
-    }
-
-    public GlobalFeedFragment(Context context) {
-        myContext = context;
+        myContext = MyApplication.getAppContext();
     }
 
     @Override

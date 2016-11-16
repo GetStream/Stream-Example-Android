@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity
     private void RefreshGlobalFeed() {
         // relaunch the global feed activity
         getSupportActionBar().setTitle(getString(R.string.menu_global_feed));
-        fragment = new GlobalFeedFragment(getApplicationContext());
+        fragment = new GlobalFeedFragment();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.main_container, fragment);
             ft.commit();
@@ -206,32 +206,32 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_global_feed:
                 // Handle the camera action
                 title = getString(R.string.menu_global_feed);
-                fragment = new GlobalFeedFragment(getApplicationContext());
+                fragment = new GlobalFeedFragment();
                 break;
 
             case R.id.nav_my_feed:
                 title = getString(R.string.menu_my_timeline);
-                fragment = new MyTimelineFragment(getApplicationContext());
+                fragment = new MyTimelineFragment();
                 break;
 
             case R.id.nav_users:
                 title = getString(R.string.menu_users);
-                fragment = new UsersFragment(getApplicationContext());
+                fragment = new UsersFragment();
                 break;
 
             case R.id.nav_my_profile:
                 title = getString(R.string.menu_my_profile);
-                fragment = new ProfileFragment(getApplicationContext());
+                fragment = new ProfileFragment();
                 break;
 
             case R.id.nav_notification_feed:
                 title = getString(R.string.menu_notification_feed);
-                fragment = new MyNotificationsFragment(getApplicationContext());
+                fragment = new MyNotificationsFragment();
                 break;
 
             case R.id.nav_aggregated_feed:
                 title = getString(R.string.menu_aggregated_feed);
-                fragment = new AggregatedFeedFragment(getApplicationContext());
+                fragment = new AggregatedFeedFragment();
                 break;
 
             case R.id.nav_register:
@@ -243,7 +243,7 @@ public class MainActivity extends AppCompatActivity
                 sharedprefsEditor.putString(getString(R.string.pref_authorid), "");
                 sharedprefsEditor.commit();
                 title = getString(R.string.menu_global_feed);
-                fragment = new GlobalFeedFragment(getApplicationContext());
+                fragment = new GlobalFeedFragment();
                 setNavByRegistered();
                 setFABByRegistered();
                 break;

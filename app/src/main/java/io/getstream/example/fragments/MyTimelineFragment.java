@@ -22,6 +22,7 @@ import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.message.BasicHeader;
+import io.getstream.example.MyApplication;
 import io.getstream.example.R;
 import io.getstream.example.adapters.FeedItemAdapter;
 import io.getstream.example.adapters.FeedsAdapter;
@@ -38,11 +39,7 @@ public class MyTimelineFragment extends Fragment {
     private Toast toast;
 
     public MyTimelineFragment() {
-        // you don't want this one
-    }
-
-    public MyTimelineFragment(Context context) {
-        myContext = context;
+        myContext = MyApplication.getAppContext();
     }
 
     @Override

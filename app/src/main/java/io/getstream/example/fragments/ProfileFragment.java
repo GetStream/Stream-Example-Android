@@ -26,6 +26,7 @@ import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.message.BasicHeader;
+import io.getstream.example.MyApplication;
 import io.getstream.example.R;
 import io.getstream.example.adapters.FeedItemAdapter;
 import io.getstream.example.adapters.FeedsAdapter;
@@ -43,10 +44,7 @@ public class ProfileFragment extends Fragment {
     private List<FeedItem> feedList;
 
     public ProfileFragment() {
-        // Required empty public constructor, you don't want this one
-    }
-    public ProfileFragment(Context context) {
-        myContext = context;
+        myContext = MyApplication.getAppContext();
     }
 
     @Override

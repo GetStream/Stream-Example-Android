@@ -22,6 +22,7 @@ import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.message.BasicHeader;
+import io.getstream.example.MyApplication;
 import io.getstream.example.R;
 import io.getstream.example.adapters.NotificationFeedAdapter;
 import io.getstream.example.adapters.NotificationFeedItemAdapter;
@@ -39,11 +40,7 @@ public class MyNotificationsFragment extends Fragment {
     private Toast toast;
 
     public MyNotificationsFragment() {
-        // you don't want this one
-    }
-
-    public MyNotificationsFragment(Context context) {
-        myContext = context;
+        myContext = MyApplication.getAppContext();
     }
 
     @Override

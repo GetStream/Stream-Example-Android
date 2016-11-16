@@ -22,6 +22,7 @@ import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.message.BasicHeader;
+import io.getstream.example.MyApplication;
 import io.getstream.example.R;
 import io.getstream.example.adapters.AggregatedFeedAdapter;
 import io.getstream.example.adapters.AggregatedFeedItemAdapter;
@@ -39,11 +40,7 @@ public class AggregatedFeedFragment extends Fragment {
     private Toast toast;
 
     public AggregatedFeedFragment() {
-        // you don't want this one
-    }
-
-    public AggregatedFeedFragment(Context context) {
-        myContext = context;
+        myContext = MyApplication.getAppContext();
     }
 
     @Override
