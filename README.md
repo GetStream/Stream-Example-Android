@@ -7,7 +7,7 @@ please check out our [blog post]().
 We're covering some "best practice" examples of how to set up a mobile application powered with Stream
 APIs, and we're happy to announce this Android example to share. As with all of our example code,
 the project is open sourced and available on GitHub. We have also submitted the application to the
-[Google Play Store](play.google.com/store/apps/details?id=io.getstream.example) for ease of installation.
+[Google Play Store](https://play.google.com/store/apps/details?id=io.getstream.example) for ease of installation.
 
 ## More information on Best Practices
 
