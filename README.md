@@ -2,7 +2,7 @@
 
 The application mimics an Instagram-style application where users can take photos, share them publicly,
 follow other users, see a notification feed and aggregated data along the way. For more information
-please check out our [blog post]().
+please check out our [blog post](https://getstream.io/blog/android-example-photo-sharing-app/).
 
 We're covering some "best practice" examples of how to set up a mobile application powered with Stream
 APIs, and we're happy to announce this Android example to share. As with all of our example code,
