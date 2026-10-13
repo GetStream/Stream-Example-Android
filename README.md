@@ -1,3 +1,5 @@
+> **This repository is archived and no longer maintained.** For a current alternative, see [stream-feeds-android-tutorial](https://github.com/GetStream/stream-feeds-android-tutorial).
+
 # Example Android photo sharing app
 
 The application mimics an Instagram-style application where users can take photos, share them publicly,
